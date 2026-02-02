@@ -41,7 +41,6 @@ env/
 # Logs and temp files
 logs/
 tmp/
-*.log
 
 # Jupyter
 .ipynb_checkpoints/
