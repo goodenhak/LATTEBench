@@ -55,17 +55,25 @@ from typing import List, Dict, Any, Optional
 # All available methods
 ALL_METHODS = ['CoT', 'Critic', 'OPROc', 'OPRO', 'ECoT', 'Evo', 'ToT']
 
-# All available datasets
+# All available datasets (first 9 classification, last 4 regression)
 ALL_DATASETS = [
-    'credit-g',
-    'credit-approval',
-    'kc1',
-    'qsar-biodeg',
-    'vehicle',
     'heart-h',
+    'credit-g',
+    'vehicle',
+    'kc1',
+    'socmob',
+    'credit-approval',
+    'qsar-biodeg',
+    'nomao',
     'electricity',
-    'balance-scale',
+    'bike-sharing',
+    'wine-quality',
+    'diamonds',
+    'cpu-small',
 ]
+
+# Regression datasets (task_type=0); all others are classification (task_type=1)
+REGRESSION_DATASETS = {'bike-sharing', 'wine-quality', 'diamonds', 'cpu-small'}
 
 # Default configuration
 DEFAULT_CONFIG = {
@@ -255,6 +263,9 @@ def get_iterations_for_method(method: str, user_iter: Optional[int]) -> int:
 def build_command(method: str, data_name: str, seed: int, output_format: str,
                   args: argparse.Namespace) -> List[str]:
     """Build command line arguments for latte.py."""
+    # Auto-determine task_type: 0 for regression datasets, 1 for classification
+    task_type = 0 if data_name in REGRESSION_DATASETS else 1
+
     cmd = [
         'python', 'latte.py',
         f'--method={method}',
@@ -262,7 +273,7 @@ def build_command(method: str, data_name: str, seed: int, output_format: str,
         f'--seed={seed}',
         f'--output_format={output_format}',
         f'--llm_model={args.llm_model}',
-        f'--task_type={args.task_type}',
+        f'--task_type={task_type}',
         f'--metadata_cat={args.metadata_cat}',
         f'--selector={args.selector}',
         f'--enlarge_num={args.enlarge_num}',
