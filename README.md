@@ -5,7 +5,7 @@ AuTomated Tabular feature Engineering (LATTE), integrating multiple feature gene
 These stages are realized through seven core modules: Serializer,
 FE Agent, Post-processor and Feature Selector, Evaluator, Retriever,
 History Database, and Warm-up Module.
-<embed src="bench.pdf" width="100%" height="180px" type="application/pdf">
+[![bench](bench.png)](bench.pdf)
 For the extended table and experiment of our LATTEBench paper, please refer to [Appendix](./Appendix.pdf).
 
 ## Environment Setup
@@ -333,7 +333,7 @@ All metrics are extracted by parsing each experiment's log file (produced by `la
 | OPROc | 10 | Code (CART based Rules) |
 | ECoT | 10 | cRPN |
 | Evo | 10 | NL, cRPN, Code |
-| ToT | uses max_steps (default 5) | NL, cRPN |
+| ToT | uses max_steps (default 5) | NL, cRPN, Code |
 
 ---
 
@@ -813,7 +813,7 @@ LATTEBench mainly uses the following datasets:
 ## Logs and Results
 
 - **Log files**: `./log/{data_name}_{method}_{llm_model}_{metadata_cat}_{seed}.log`
-- **Best model**: `./tmp/{data_name}/best_train.csv`, `best_test.csv`
+- **Best dataset**: `./tmp/{data_name}/best_train.csv`, `best_test.csv`
 - **Metadata**: `./tmp/{data_name}/metadata.json`
 - **Benchmark results**: `./log/bench_results_{timestamp}.json`
 - **Baseline performance results**: `./log/baseline_results_{timestamp}.json`
