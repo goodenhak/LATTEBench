@@ -1,7 +1,12 @@
 # LATTEBench
 
-LATTEBench is an  LLM-powered
-AuTomated Tabular feature Engineering (LATTE) framework, integrating multiple feature generation methods.
+LATTEBench is an standardized and modular framework designed for LLM-powered
+AuTomated Tabular feature Engineering (LATTE), integrating multiple feature generation methods. The framework organizes the pipeline into three stages as shown in Figure bellow: Prompt Construction, LLM-powered FE, and Post-process.
+These stages are realized through seven core modules: Serializer,
+FE Agent, Post-processor and Feature Selector, Evaluator, Retriever,
+History Database, and Warm-up Module.
+<embed src="bench.pdf" width="100%" height="180px" type="application/pdf">
+For the extended table and experiment of our LATTEBench paper, please refer to [Appendix](./Appendix.pdf).
 
 ## Environment Setup
 
@@ -23,7 +28,7 @@ pip install openai pandas numpy scikit-learn torch transformers sentence-transfo
 
 ### 2. Configure API Keys
 
-This project supports multiple LLM backends. Configure the corresponding API key based on the model you use.
+To use this project, you need to first configure the corresponding API key based on the model you use.
 
 Create a `.env` file or set environment variables:
 
@@ -57,30 +62,30 @@ python bench.py --methods CoT Critic --datasets credit-g --seeds 1 2 3
 
 ## latte.py - Unified Method Entry Point
 
-`latte.py` is the unified entry point of the framework. Use the `--method` parameter to specify different feature engineering methods.
+`latte.py` is the unified entry point of the framework. Use the `--method` parameter to specify method families.
 
 ### Supported Methods
 
 | Method | Prompting | Features |
 |--------|-------------|----------|
-| `CoT` | Chain-of-Thought | Basic chain-of-thought, supports Positive-Negative feedback (--history) and Top-k feedback (--top) |
+| `CoT` | Chain-of-Thought | Chain-of-thought, supports Positive-Negative feedback (--history) and Top-k feedback (--top) |
 | `Critic` | Generator-Critic | Invokes a Critic Agent to provide improvement suggestions after feature generation |
-| `OPRO` | Optimization by Prompting | Multi-turn dialogue within each iteration for progressive improvement |
-| `OPROc` | OPRO with CART reasoning | Dialogue-based feature generation using decision tree generated rules |
-| `ECoT` | EvoPrompt | Uses island model evolution, directly executes postfix expressions |
+| `OPRO` | Optimization by Prompting | Multi-turn dialogue within each iteration for output refinement |
+| `OPROc` | OPRO with CART reasoning | OPRO with decision tree based reasoning |
+| `ECoT` | EvoPrompt | Uses the Warm-up Module and island model evolution |
 | `Evo` | EvoPrompt | Island model evolution, supports multiple output formats |
-| `ToT` | Tree of Thought | Use Monte Carlo Tree Search to explore the feature space |
+| `ToT` | Tree of Thought | Use Monte Carlo Tree Search to explore the feature space, supports Positive-Negative feedback (--history) |
 
 ### Command-Line Arguments
 
 #### Basic Arguments
 
 ```bash
---method         # Method selection: CoT, Critic, OPRO, OPROc, ECoT, Evo, ToT
+--method         # Method family selection: CoT, Critic, OPRO, OPROc, ECoT, Evo, ToT
 --data_name      # Dataset name (default: credit-g)
 --llm_model      # LLM model (default: deepseek-chat)
 --output_format  # Output format: NL, cRPN, Code, Rule (default: NL)
---iter           # Number of iterations (default: 50)
+--iter           # Number of iterations (default: 10)
 --seed           # Random seed (default: 2)
 --task_type      # Task type: 1=classification, 0=regression (default: 1)
 ```
@@ -95,7 +100,7 @@ python bench.py --methods CoT Critic --datasets credit-g --seeds 1 2 3
 #### OPRO/OPROc-Specific Arguments
 
 ```bash
---dialogue_turns # Number of dialogue turns per iteration (default: 10)
+--dialogue_turns # Number of optimization turns per iteration (default: 10)
 ```
 
 #### ECoT/Evo-Specific Arguments
@@ -104,24 +109,25 @@ python bench.py --methods CoT Critic --datasets credit-g --seeds 1 2 3
 --ind_num        # Number of individuals per island (default: 90)
 --remove_time    # Frequency of removing weak individuals (default: 1)
 --update_time    # Inter-island update frequency (default: 2)
---random_sample  # Random sampling (ECoT): 1=yes, 0=no (default: 0)
+--random_sample  # Random select initial individuals: 1=yes, 0=no (default: 0)
 ```
 
 #### ToT-Specific Arguments
 
 ```bash
---num_thoughts       # Number of thoughts to generate (default: 2)
+--history        # Use history feedback: 1=yes, 0=no (default: 1)
+--num_thoughts       # Number of thoughts to generate each time (default: 2)
 --max_steps          # Maximum search steps (default: 5)
 --max_states         # Maximum number of states to maintain (default: 1)
---pruning_threshold  # Pruning threshold (default: 0.003)
+--pruning_threshold  # Pruning threshold in MCTS (default: 0.003)
 ```
 
 #### Other Arguments
 
 ```bash
 --selector       # Use feature selector: 1=yes, 0=no (default: 1)
---enlarge_num    # Feature expansion multiplier (default: 3)
---metadata_cat   # Metadata category (default: 3)
+--enlarge_num    # Maximum expansion multiplier limit for the feature set (default: 3)
+--metadata_cat   # Metadata category: 0:native 1:human-written(+type) 2:LLM-generated 3:calculated values (default: 3)
 --max_tokens     # LLM max tokens (default: 8192)
 --temperature    # LLM temperature (default: 1.0)
 --log_path       # Log directory (default: ./log)
@@ -132,25 +138,25 @@ python bench.py --methods CoT Critic --datasets credit-g --seeds 1 2 3
 
 ```bash
 # Basic CoT
-python latte.py --method CoT --data_name credit-g --llm_model gpt-4o --iter 50
+python latte.py --method CoT --data_name credit-g --llm_model gpt-4o --iter 10
 
 # CoT + Top-k history feedback
 python latte.py --method CoT --data_name credit-g --history 1 --top 1
 
-# Critic method
-python latte.py --method Critic --data_name credit-g --iter 30
+# Critic
+python latte.py --method Critic --data_name credit-g --iter 10
 
 # OPRO dialogue optimization (5 dialogue turns x 10 iterations)
 python latte.py --method OPRO --data_name credit-g --dialogue_turns 5 --iter 10
 
-# OPROc (decision tree rule dialogue)
+# OPROc (CART-based reasoning)
 python latte.py --method OPROc --data_name credit-g --dialogue_turns 10
 
-# ECoT evolution
-python latte.py --method ECoT --data_name credit-g --ind_num 90 --iter 50
+# EvoPrompt with Warm-up (need to do datacollection first)
+python latte.py --method ECoT --data_name credit-g --ind_num 90 --iter 10
 
-# Evo general evolution (supports multiple formats)
-python latte.py --method Evo --data_name credit-g --output_format NL --iter 100
+# EvoPrompt with cold-start (supports multiple formats)
+python latte.py --method Evo --data_name credit-g --output_format NL --iter 10
 
 # ToT Tree of Thought
 python latte.py --method ToT --data_name credit-g --num_thoughts 3 --max_steps 5
@@ -160,14 +166,14 @@ python latte.py --method ToT --data_name credit-g --num_thoughts 3 --max_steps 5
 
 ## bench.py - Benchmark Tool
 
-`bench.py` is used for batch experiment execution, supporting combinations of multiple methods, datasets, and seeds.
+`bench.py` is used for batch experiment execution, supporting combinations of multiple methods, datasets, and random spilt seeds.
 
 ### Features
 
 - **Batch Execution**: Automatically combines methods, datasets, and seeds for experiments
 - **Resume Support**: Detects existing log files and automatically skips completed experiments
-- **Log-Based Metrics**: Parses log files to extract real metrics (time, tokens, val, test, AutoGluon test)
-- **Success Rate**: Calculates per-iteration success rate from Error/Warning occurrences in logs
+- **Log-Based Metrics**: Parses log files to extract real metrics (time, tokens, val, test, AutoGluon test, ect.)
+- **Success Rate**: Calculates success rate from Error/Warning occurrences in logs
 - **Configuration Persistence**: Supports saving/loading experiment configurations
 - **Dry Run**: Preview mode that displays commands without executing them
 
@@ -321,13 +327,13 @@ All metrics are extracted by parsing each experiment's log file (produced by `la
 
 | Method | Default Iterations | Recommended Output Formats |
 |--------|-------------------|---------------------------|
-| CoT | 50 | NL, cRPN, Code |
-| Critic | 50 | NL, cRPN, Code |
+| CoT | 10 | NL, cRPN, Code |
+| Critic | 10 | NL, cRPN, Code |
 | OPRO | 10 | NL, cRPN, Code |
-| OPROc | 10 | Rule |
-| ECoT | 50 | cRPN |
-| Evo | 100 | NL, cRPN, Code |
-| ToT | 1 | NL, cRPN |
+| OPROc | 10 | Code (CART based Rules) |
+| ECoT | 10 | cRPN |
+| Evo | 10 | NL, cRPN, Code |
+| ToT | uses max_steps (default 5) | NL, cRPN |
 
 ---
 
@@ -337,8 +343,8 @@ All metrics are extracted by parsing each experiment's log file (produced by `la
 
 ### Features
 
-- **Fast Testing**: Uses minimal iterations (2), single seed (1), single small dataset (balance-scale)
-- **Quick Coverage**: Tests 2 methods (CoT + OPRO) covering both regular and dialogue-based methods
+- **Fast Testing**: Uses minimal iterations (2), single seed (1), single classic dataset (credit-g)
+- **Quick Coverage**: Tests CoT, OPRO, ToT, ECoT, and OPROc, covering all the method families
 - **Isolated Logs**: Uses separate `./log_test` directory to avoid interfering with real experiments
 - **Verification**: Automatically checks log file generation, parsing, and success rate calculation
 
@@ -376,68 +382,207 @@ python test_bench.py --methods CoT Critic --iter 3
 
 ### Output Example
 
+<details>
+<summary>View Example</summary>
+
 ```
 ======================================================================
 BENCH.PY FUNCTIONAL TEST
 ======================================================================
-Test started at: 2024-01-15 10:00:00
+Test started at: 2026-02-03 18:38:47
 
 Test Configuration:
-  Methods:        ['CoT', 'OPRO']
-  Datasets:       ['balance-scale']
+  Methods:        ['CoT', 'Critic', 'OPRO', 'OPROc', 'ToT', 'ECoT']
+  Datasets:       ['credit-g']
   Seeds:          [1]
   Iterations:     2
   Dialogue turns: 2
+  Max steps:      2 (ToT)
+  Num thoughts:   2 (ToT)
+  Max states:     1 (ToT)
   Log path:       ./log_test
 
-  Total experiments: 2
+  Total experiments: 6
 
 ======================================================================
 Running bench.py with test configuration
 ======================================================================
-Command: python bench.py --methods CoT OPRO --datasets balance-scale ...
+Command: python bench.py --methods CoT Critic OPRO OPROc ToT ECoT --datasets credit-g --seeds 1 --iter=2 --dialogue_turns=2 --max_steps=2 --num_thoughts=2 --max_states=1 --log_path=./log_test --llm_model=gpt-4o --metadata_cat=3
 
-[1/2] RUN: CoT | balance-scale | NL | seed=1
-         SUCCESS (15.2s)
-[2/2] RUN: OPRO | balance-scale | NL | seed=1
-         SUCCESS (22.3s)
+======================================================================
+LATTEBench Benchmark Runner
+======================================================================
+Methods: ['CoT', 'Critic', 'OPRO', 'OPROc', 'ToT', 'ECoT']
+Datasets: ['credit-g']
+Seeds: [1]
+LLM Model: gpt-4o
+Total experiments: 6
+======================================================================
+
+[1/6] RUN: CoT | credit-g | NL | seed=1
+         SUCCESS (90.0s)
+
+[2/6] RUN: Critic | credit-g | NL | seed=1
+         SUCCESS (88.9s)
+
+[3/6] RUN: OPRO | credit-g | NL | seed=1
+         SUCCESS (85.0s)
+
+[4/6] RUN: OPROc | credit-g | Code | seed=1
+         SUCCESS (72.9s)
+
+[5/6] RUN: ToT | credit-g | NL | seed=1
+         SUCCESS (93.0s)
+
+[6/6] RUN: ECoT | credit-g | cRPN | seed=1
+         SUCCESS (167.6s)
+
+======================================================================
+BENCHMARK SUMMARY
+======================================================================
+Total wall time: 597.4s (10.0m)
+Completed: 6
+Skipped:   0
+Failed:    0
+
+----------------------------------------------------------------------
+METRICS BY METHOD (parsed from log files)
+----------------------------------------------------------------------
+
+[CoT]
+  Avg Time:         23.24s (1 runs)
+  Avg Tokens:       4518 (1 runs)
+  Avg Val (Best):   0.7800 (1 runs)
+  Avg Test (RF):    0.7800 (1 runs)
+  Avg Test (AG):    0.8000 (1 runs)
+  Avg Success Rate: 100.00% (overall 2/2=100.00%, 1 runs)
+
+[Critic]
+  Avg Time:         25.24s (1 runs)
+  Avg Tokens:       10870 (1 runs)
+  Avg Val (Best):   0.7700 (1 runs)
+  Avg Test (RF):    0.7500 (1 runs)
+  Avg Test (AG):    0.7550 (1 runs)
+  Avg Success Rate: 100.00% (overall 2/2=100.00%, 1 runs)
+
+[ECoT]
+  Avg Time:         159.80s (1 runs)
+  Avg Tokens:       24623 (1 runs)
+  Avg Test (RF):    0.7850 (1 runs)
+  Avg Test (AG):    0.7850 (1 runs)
+  Avg Success Rate: 70.00% (overall 7/10=70.00%, 1 runs)
+
+[OPRO]
+  Avg Time:         22.38s (1 runs)
+  Avg Tokens:       7315 (1 runs)
+  Avg Val (Best):   0.7950 (1 runs)
+  Avg Test (RF):    0.7500 (1 runs)
+  Avg Test (AG):    0.7900 (1 runs)
+  Avg Success Rate: 100.00% (overall 2/2=100.00%, 1 runs)
+
+[OPROc]
+  Avg Time:         14.53s (1 runs)
+  Avg Tokens:       2447 (1 runs)
+  Avg Val (Best):   0.8150 (1 runs)
+  Avg Test (RF):    0.8000 (1 runs)
+  Avg Test (AG):    0.7600 (1 runs)
+  Avg Success Rate: 100.00% (overall 2/2=100.00%, 1 runs)
+
+[ToT]
+  Avg Time:         25.78s (1 runs)
+  Avg Test (RF):    0.7800 (1 runs)
+  Avg Test (AG):    0.8000 (1 runs)
+  Avg Success Rate: 0.00% (overall 0/3=0.00%, 1 runs)
+
+======================================================================
+
+Results saved to: ./log_test/bench_results_20260203_184845.json
 
 ======================================================================
 Verifying log files
 ======================================================================
-  [OK] balance-scale_CoT_gpt-4o_3_1.log (8542 bytes)
-  [OK] balance-scale_OPRO_gpt-4o_3_1.log (12341 bytes)
+  [OK] credit-g_CoT_gpt-4o_3_1.log (26069 bytes)
+  [OK] credit-g_Critic_gpt-4o_3_1.log (33696 bytes)
+  [OK] credit-g_OPRO_gpt-4o_3_1.log (9700 bytes)
+  [OK] credit-g_OPROc_gpt-4o_3_1.log (4137 bytes)
+  [OK] credit-g_ToT_gpt-4o_3_1.log (52711 bytes)
+  [OK] credit-g_ECoT_gpt-4o_3_1.log (98527 bytes)
 
   Found 1 bench results file(s):
-    - bench_results_20240115_100000.json (3456 bytes)
+    - bench_results_20260203_184845.json (5304 bytes)
 
 ======================================================================
 Testing log parsing functions
 ======================================================================
 
-  Parsing: balance-scale_CoT_gpt-4o_3_1.log
+  Parsing: credit-g_CoT_gpt-4o_3_1.log
     Metrics:
-      total_time: 15.12
-      total_tokens: 4532
-      best_val: 0.7891
-      final_test_rf: 0.7654
-      final_test_ag: 0.7823
+      total_time: 23.2400
+      total_tokens: 4518
+      best_val: 0.7800
+      final_test_rf: 0.7800
+      final_test_ag: 0.8000
     Success Rate:
       total_iters: 2
       success_iters: 2
       success_rate: 100.00%
 
-  Parsing: balance-scale_OPRO_gpt-4o_3_1.log
+  Parsing: credit-g_Critic_gpt-4o_3_1.log
     Metrics:
-      total_time: 22.05
-      total_tokens: 8912
-      best_val: 0.7934
-      final_test_rf: 0.7701
-      final_test_ag: 0.7889
+      total_time: 25.2400
+      total_tokens: 10870
+      best_val: 0.7700
+      final_test_rf: 0.7500
+      final_test_ag: 0.7550
     Success Rate:
       total_iters: 2
-      success_iters: 1
-      success_rate: 50.00%
+      success_iters: 2
+      success_rate: 100.00%
+
+  Parsing: credit-g_OPRO_gpt-4o_3_1.log
+    Metrics:
+      total_time: 22.3800
+      total_tokens: 7315
+      best_val: 0.7950
+      final_test_rf: 0.7500
+      final_test_ag: 0.7900
+    Success Rate:
+      total_iters: 2
+      success_iters: 2
+      success_rate: 100.00%
+
+  Parsing: credit-g_OPROc_gpt-4o_3_1.log
+    Metrics:
+      total_time: 14.5300
+      total_tokens: 2447
+      best_val: 0.8150
+      final_test_rf: 0.8000
+      final_test_ag: 0.7600
+    Success Rate:
+      total_iters: 2
+      success_iters: 2
+      success_rate: 100.00%
+
+  Parsing: credit-g_ToT_gpt-4o_3_1.log
+    Metrics:
+      total_time: 25.7800
+      final_test_rf: 0.7800
+      final_test_ag: 0.8000
+    Success Rate:
+      total_iters: 3
+      success_iters: 0
+      success_rate: 0.00%
+
+  Parsing: credit-g_ECoT_gpt-4o_3_1.log
+    Metrics:
+      total_time: 159.8000
+      total_tokens: 24623
+      final_test_rf: 0.7850
+      final_test_ag: 0.7850
+    Success Rate:
+      total_iters: 10
+      success_iters: 7
+      success_rate: 70.00%
 
 ======================================================================
 TEST SUMMARY
@@ -447,14 +592,15 @@ All tests PASSED!
 Cleaning up test logs in './log_test'...
 Done.
 
-Test finished at: 2024-01-15 10:02:30
+Test finished at: 2026-02-03 18:48:45
 ```
+</details>
 
 ---
 
 ## baseline_eval.py - Baseline Performance Evaluation
 
-`baseline_eval.py` evaluates model performance on raw features (without feature engineering) as a comparison baseline for feature engineering methods.
+`baseline_eval.py` evaluates downstream model performance on raw features (without feature engineering) as a baseline for feature engineering methods.
 
 ### Features
 
@@ -512,24 +658,23 @@ python baseline_eval.py
 
 ```
 ======================================================================
-Baseline Performance Evaluation
+SUMMARY
 ======================================================================
-Datasets: ['credit-g']
-Seeds: [1, 2, 3]
-Downstream: both
+Total time: 336.1s
+
+credit-g:
+  RF  - Val: 0.7667 ± 0.0250, Test: 0.7300 ± 0.0350
+  AG  - Val: 0.7633 ± 0.0200, Test: 0.7683 ± 0.0650
 ======================================================================
 
-[1/3] Evaluating: credit-g | seed=1
-    Features: 20, Samples: 600
-    RF  - Val: 0.7500, Test: 0.7300
-    AG  - Val: 0.7650, Test: 0.7450
+Results saved to: ./log/baseline_results_20260203_172242.json
 
 ======================================================================
 TABLE FORMAT (for paper/report)
 ======================================================================
-Dataset              RF Val     RF Test    AG Val     AG Test
+Dataset              RF Val     RF Test    AG Val     AG Test   
 ----------------------------------------------------------------------
-credit-g             0.7467     0.7267     0.7633     0.7417
+credit-g             0.7667     0.7300     0.7633     0.7683    
 ======================================================================
 ```
 
@@ -590,20 +735,78 @@ done
 
 ---
 
+## datacollection - Warm-up Module
+
+The `datacollection/rl_data_collector.py` script is used to collect feature engineering demonstrations for the Warm-up module, which provides initial feature transformation examples for ECoT method. The datacollection module is based on [ELLM-FT](https://github.com/NanxuGong/ELLM-FT).
+
+### Steps
+
+1. **Split raw data**: Use `tabular_data/csv_split.py` to split the original dataset into train/val/test sets:
+   ```bash
+   python tabular_data/csv_split.py --data_name credit-g --seed 1
+   ```
+
+2. **Copy CSV files**: Copy the three generated CSV files (train, val, test) to the `data/` directory:
+   ```bash
+   mkdir -p data/credit-g/seed1/
+   cp tabular_data/credit-g_train.csv data/credit-g/seed1/credit-g_train.csv
+   cp tabular_data/credit-g_val.csv data/credit-g/seed1/credit-g_val.csv
+   cp tabular_data/credit-g_test.csv data/credit-g/seed1/credit-g_test.csv
+   ```
+
+3. **Run RL data collector**: Execute the data collector to generate feature engineering demonstrations:
+   ```bash
+   python ./datacollection/rl_data_collector.py --file-name credit-g
+   ```
+   This will generate the following output files:
+   - In `tmp/credit-g/`: Three files starting with `STANDALONE` (demonstration files for ECoT)
+   - In `data/`: Pre-processed original data and feature-engineered data:
+     - `credit-g_eval_original_train.csv`, `credit-g_eval_original_val.csv`, `credit-g_eval_original_test.csv` (pre-processed original features)
+     - `credit-g_eval_generated_train.csv`, `credit-g_eval_generated_val.csv`, `credit-g_eval_generated_test.csv` (features after RL-based feature engineering)
+
+4. **Copy results for ECoT**: Copy the generated files to the corresponding `data/` directory:
+   ```bash
+   cp tmp/credit-g/STANDALONE* data/credit-g/seed1/
+   cp data/credit-g_eval_*.csv data/credit-g/seed1/
+   ```
+
+### Output
+
+After completing all steps, `data/credit-g/seed1/` should contain:
+- `credit-g_train.csv`, `credit-g_val.csv`, `credit-g_test.csv` (split datasets)
+- `credit-g_eval_original_*.csv` (pre-processed original features)
+- `credit-g_eval_generated_*.csv` (RL feature-engineered features)
+- `STANDALONE*` (demonstration files)
+
+The ECoT method in `latte.py` can then use the collected demonstrations for feature engineering Warm-up.
+
+---
+
 ## Datasets
 
-The framework supports the following datasets (located in the `data/` directory):
+LATTEBench mainly uses the following datasets:
 
 | Dataset | Description |
 |---------|-------------|
-| credit-g | German Credit Assessment |
-| credit-approval | Credit Approval |
-| kc1 | KC1 Software Defect Prediction |
-| qsar-biodeg | QSAR Biodegradability Prediction |
-| vehicle | Vehicle Classification |
 | heart-h | Heart Disease Prediction |
+| credit-g | German Credit Assessment |
+| vehicle | Vehicle Classification |
+| kc1 | KC1 Software Defect Prediction |
+| socmob | Social Mobility |
+| credit-approval | Credit Approval |
+| qsar-biodeg | QSAR Biodegradability Prediction |
+| nomao | Nomao Location Classification |
 | electricity | Electricity Demand Prediction |
-| balance-scale | Balance Scale Classification |
+| bike-sharing | Bike Sharing Demand |
+| wine-quality | Wine Quality Assessment |
+| diamonds | Diamond Price Prediction |
+| cpu-small | CPU Performance |
+
+**Directory Structure:**
+- `tabular_data/`: Original raw datasets
+- `data/`: Pre-processed data and feature engineering history generated by the datacollector (Warm-up module)
+- `metadata/`: Dataset metadata (feature descriptions, types, etc.)
+- `task_descriptions.json`: Task description information for each dataset
 
 ---
 

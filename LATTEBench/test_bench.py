@@ -28,8 +28,8 @@ from datetime import datetime
 # =============================================================================
 
 TEST_CONFIG = {
-    # Use only 1-2 fast methods for testing
-    'methods': ['CoT', 'OPRO', 'ToT', 'ECoT', 'OPROc'],
+    # Test all methods
+    'methods': ['CoT', 'Critic', 'OPRO', 'OPROc', 'ToT', 'ECoT'],
 
     # Use only 1 small dataset
     'datasets': ['credit-g'],
@@ -42,6 +42,11 @@ TEST_CONFIG = {
 
     # OPRO specific: minimal dialogue turns
     'dialogue_turns': 2,
+
+    # ToT specific: minimal steps and thoughts
+    'max_steps': 2,
+    'num_thoughts': 2,
+    'max_states': 1,
 
     # Use a separate log directory for tests
     'log_path': './log_test',
@@ -82,6 +87,9 @@ def build_bench_command(config, dry_run=False, verbose=False):
         '--seeds', *[str(s) for s in config['seeds']],
         f'--iter={config["iter"]}',
         f'--dialogue_turns={config["dialogue_turns"]}',
+        f'--max_steps={config["max_steps"]}',
+        f'--num_thoughts={config["num_thoughts"]}',
+        f'--max_states={config["max_states"]}',
         f'--log_path={config["log_path"]}',
         f'--llm_model={config["llm_model"]}',
         f'--metadata_cat={config["metadata_cat"]}',
@@ -249,6 +257,9 @@ def main():
     print(f"  Seeds:          {config['seeds']}")
     print(f"  Iterations:     {config['iter']}")
     print(f"  Dialogue turns: {config['dialogue_turns']}")
+    print(f"  Max steps:      {config['max_steps']} (ToT)")
+    print(f"  Num thoughts:   {config['num_thoughts']} (ToT)")
+    print(f"  Max states:     {config['max_states']} (ToT)")
     print(f"  Log path:       {config['log_path']}")
 
     total_experiments = len(config['methods']) * len(config['datasets']) * len(config['seeds'])

@@ -1,236 +1,184 @@
+import os
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
+
 from sklearn.model_selection import train_test_split
-import warnings
-warnings.filterwarnings('ignore')
-import os
+from sklearn.preprocessing import LabelEncoder
+from autogluon.tabular import TabularDataset
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-def csv_split(csv_file_path, hdf_file_path, hdf_dataset_name='my_dataset', 
-               target_col=None, fillna_method='auto', output_format='hdf', encoding='utf-8',
-               handle_categorical='auto', test_size=0.2, seed=42, task_type=1):
-    """
-    Converts a CSV file to an HDF5 file, performs preprocessing, and splits the
-    data into training and testing sets. Only the training data is saved.
 
-    Args:
-        csv_file_path (str): The path to the input CSV file.
-        hdf_file_path (str): The path where the output HDF5 file will be saved.
-        hdf_dataset_name (str): The name of the dataset for features within the HDF5 file.
-        target_col (str): The name of the target variable column for train-test split.
-                          Required for splitting.
-        fillna_method (str): Method to fill missing values. Options: 
-                            'auto', 'mean', 'median', 'mode', 'zero', 'ffill', 'none'
-        output_format (str): The format to save the output file. Options: 'hdf', 'csv', 'both'
-        encoding (str): Encoding for reading CSV file.
-        handle_categorical (str): How to handle categorical columns. Options:
-                                 'auto', 'label_encode', 'frequency', 'none'
-        test_size (float): The proportion of the dataset to include in the test split.
-        seed (int): Random state for reproducibility.
-        task_type (int): 1 for classification (stratify), 0 for regression (no stratify).
-                         Used for stratified splitting based on the target variable.
-    """
-    try:
-        # Check if the CSV file exists
-        if not os.path.exists(csv_file_path):
-            print(f"Error: CSV file not found at '{csv_file_path}'")
-            return
+def safe_scale_large_values(train_data: pd.DataFrame, test_data: pd.DataFrame, threshold=1e30):
+    train_scaled = train_data.copy()
+    test_scaled = test_data.copy()
 
-        # Read the CSV file
-        print(f"Reading CSV file: '{csv_file_path}'...")
-        try:
-            df = pd.read_csv(csv_file_path, encoding=encoding, low_memory=False)
-        except UnicodeDecodeError:
-            print("UTF-8 encoding failed, trying latin-1...")
-            df = pd.read_csv(csv_file_path, encoding='latin-1', low_memory=False)
-        
-        print(f"Original data shape: {df.shape}")
+    train_scaled = train_scaled.replace([np.inf, -np.inf], threshold)
+    test_scaled = test_scaled.replace([np.inf, -np.inf], threshold)
 
-        # Separate features and target if a target column is specified
-        if target_col and target_col in df.columns:
-            print(f"Separating features and target variable: '{target_col}'")
-            y = df[target_col]
-            X = df.drop(target_col, axis=1)
-        else:
-            if target_col:
-                print(f"Warning: Target column '{target_col}' not found. Skipping train-test split.")
-            X = df
-            y = None
+    max_abs = pd.concat(
+        [train_scaled.abs().max(), test_scaled.abs().max()],
+        axis=1
+    ).max(axis=1)
 
-        # Identify column types on the feature DataFrame (X)
-        numerical_cols = X.select_dtypes(include=[np.number]).columns.tolist()
-        categorical_cols = X.select_dtypes(include=['object', 'category']).columns.tolist()
-        boolean_cols = X.select_dtypes(include=['bool']).columns.tolist()
-        
-        print(f"Numerical columns: {len(numerical_cols)}")
-        print(f"Categorical columns: {len(categorical_cols)}: {categorical_cols}")
-        print(f"Boolean columns: {len(boolean_cols)}: {boolean_cols}")
+    bad_cols = max_abs[max_abs > threshold].index.tolist()
 
-        # Handle boolean columns - convert to 0 and 1
-        if boolean_cols:
-            print(f"\nConverting boolean columns to integers (0 and 1)...")
-            for col in boolean_cols:
-                X[col] = X[col].astype(int)
-                print(f"Converted boolean column '{col}' to integers (0/1)")
-
-        # Handle missing values
-        print(f"\nHandling missing values with method: {fillna_method}")
-        missing_info = X.isnull().sum()
-        if missing_info.sum() > 0:
-            print("Missing values per column:")
-            for col, count in missing_info[missing_info > 0].items():
-                print(f"  {col}: {count} missing values")
-
-        if fillna_method != 'none':
-            # Handle numerical columns (including converted boolean columns)
-            numerical_cols_extended = numerical_cols + boolean_cols
-            for col in numerical_cols_extended:
-                if X[col].isnull().sum() > 0:
-                    if fillna_method == 'auto':
-                        fill_value = X[col].median()
-                    elif fillna_method == 'mean':
-                        fill_value = X[col].mean()
-                    elif fillna_method == 'median':
-                        fill_value = X[col].median()
-                    elif fillna_method == 'zero':
-                        fill_value = 0
-                    elif fillna_method == 'ffill':
-                        X[col] = X[col].fillna(method='ffill')
-                        continue
-                    else:
-                        fill_value = 0
-                    
-                    X[col] = X[col].fillna(fill_value)
-                    print(f"Filled missing values in '{col}' with {fill_value:.2f}")
-
-            # Handle categorical columns
-            for col in categorical_cols:
-                if X[col].isnull().sum() > 0:
-                    if fillna_method in ['auto', 'mode', 'ffill']:
-                        fill_value = X[col].mode()[0] if not X[col].mode().empty else 'Unknown'
-                    elif fillna_method == 'zero':
-                        fill_value = 'Unknown'
-                    else:
-                        fill_value = 'Unknown'
-                    
-                    X[col] = X[col].fillna(fill_value)
-                    print(f"Filled missing values in '{col}' with '{fill_value}'")
-
-        # Handle categorical columns - encode all text columns
-        if handle_categorical != 'none' and categorical_cols:
-            print(f"\nEncoding categorical columns with method: {handle_categorical}")
-            
-            for col in categorical_cols:
-                if handle_categorical == 'auto':
-                    # Auto-detect: label encode if few categories, frequency encode if many
-                    unique_count = X[col].nunique()
-                    if unique_count <= 20:
-                        le = LabelEncoder()
-                        X[col] = le.fit_transform(X[col].astype(str))
-                        print(f"Label encoded '{col}' ({unique_count} categories)")
-                    else:
-                        freq_map = X[col].value_counts(normalize=True).to_dict()
-                        X[col] = X[col].map(freq_map)
-                        print(f"Frequency encoded '{col}' ({unique_count} categories)")
-                
-                elif handle_categorical == 'label_encode':
-                    le = LabelEncoder()
-                    X[col] = le.fit_transform(X[col].astype(str))
-                    print(f"Label encoded '{col}'")
-                
-                elif handle_categorical == 'frequency':
-                    freq_map = X[col].value_counts(normalize=True).to_dict()
-                    X[col] = X[col].map(freq_map)
-                    print(f"Frequency encoded '{col}'")
-
-        # Final data info
-        print(f"\nFinal preprocessed data shape: {X.shape}")
-        print(f"Missing values: {X.isnull().sum().sum()}")
-        
-        # Split the data into training and testing sets
-        if y is not None:
-            # Check if target column needs encoding
-            if pd.api.types.is_object_dtype(y) or pd.api.types.is_categorical_dtype(y) or pd.api.types.is_bool_dtype(y):
-                print(f"Encoding target variable '{target_col}'...")
-                le_y = LabelEncoder()
-                y = le_y.fit_transform(y.astype(str))
-
-            print(f"\nSplitting data into training ({1-test_size:.0%}) and testing ({test_size:.0%}) sets...")
-            X_train, X_test, y_train, y_test = train_test_split(
-                X,
-                y,
-                test_size=test_size,
-                random_state=seed,
-                stratify=y if task_type == 1 else None
+    if bad_cols:
+        print(f"⚠️ 检测到 {len(bad_cols)} 列值过大: {bad_cols}")
+        for col in bad_cols:
+            max_val = max(
+                train_scaled[col].abs().max(),
+                test_scaled[col].abs().max()
             )
-            print(f"X_train shape: {X_train.shape}, y_train shape: {y_train.shape}")
-            print(f"X_test shape: {X_test.shape}, y_test shape: {y_test.shape}")
+            if max_val == 0:
+                continue
+            scale_factor = max_val / threshold
+            train_scaled[col] /= scale_factor
+            test_scaled[col] /= scale_factor
+            print(f"✅ 已缩放列 '{col}'，缩放因子 = {scale_factor:.3e}")
+    else:
+        print("✅ 未发现超大数值或 inf，无需缩放。")
+
+    return train_scaled, test_scaled
+
+
+def split_csv(data_name, task_type, seed, test_size=0.2):
+    """
+    CSV -> split -> preprocess -> CSV
+    """
+    # ========= 读取原始 CSV =========
+    df = pd.read_csv(data_name + ".csv")
+
+    # 目标列统一为 target
+    original_target = df.columns[-1]
+    df = df.rename(columns={original_target: "target"})
+
+    if task_type == 1:
+        le = LabelEncoder()
+        df["target"] = le.fit_transform(df["target"])
+
+    os.makedirs(os.path.join("tmp", data_name), exist_ok=True)
+    df.to_csv(os.path.join("tmp", data_name, f"{data_name}_raw.csv"), index=False)
+
+    target = "target"
+
+    # ========= split =========
+    X = df.drop(columns=[target])
+    y = df[target]
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=test_size,
+        random_state=seed,
+        stratify=y if task_type == 1 else None
+    )
+
+    # 验证集
+    val_ratio = 0.25
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_train,
+        y_train,
+        test_size=val_ratio,
+        random_state=seed,
+        stratify=y_train if task_type == 1 else None
+    )
+
+
+    # 先保存一次（dtype 清洗）
+    X_train[target] = y_train
+    X_train.to_csv(os.path.join('tmp', data_name, 'train.csv'), index=False)
+    X_test[target] = y_test
+    X_test.to_csv(os.path.join('tmp', data_name, 'test.csv'), index=False)
+    X_val[target] = y_val
+    X_val.to_csv(os.path.join('tmp', data_name, 'val.csv'), index=False)
+
+    # ========= 重新读取 =========
+    train_data = TabularDataset(os.path.join("tmp", data_name, "train.csv"))
+    test_data = TabularDataset(os.path.join("tmp", data_name, "test.csv"))
+    val_data = TabularDataset(os.path.join("tmp", data_name, "val.csv"))
+
+    X_train = train_data.drop(columns=[target])
+    y_train = train_data[target]
+    X_test = test_data.drop(columns=[target])
+    y_test = test_data[target]
+    X_val = val_data.drop(columns=[target])
+    y_val = val_data[target]
+
+    # ========= 预处理 =========
+    # 预处理
+    for col in X_train.columns:
+        if X_train[col].dtype == bool:
+            X_train[col] = X_train[col].astype(np.int8)
+            X_test[col]  = X_test[col].astype(np.int8)
+            X_val[col]   = X_val[col].astype(np.int8)
+            continue
+        if X_train[col].dtype == "object":
+            # 填充缺失值
+            X_train[col] = X_train[col].fillna("missing")
+            X_test[col] = X_test[col].fillna("missing")
+            X_val[col] = X_val[col].fillna("missing")
+            # Label Encoding
+            le = LabelEncoder()
+            le.fit(pd.concat([X_train[col], X_test[col]], axis=0))
+            X_train[col] = le.transform(X_train[col])
+            X_test[col] = le.transform(X_test[col])
+            X_val[col] = le.transform(X_val[col])
         
-            # Combine X_train and y_train into a single DataFrame
-            y_train_df = pd.DataFrame(y_train, columns=[target_col], index=X_train.index)
-            y_test_df = pd.DataFrame(y_test, columns=[target_col], index=X_test.index)
-            train_df = pd.concat([X_train, y_train_df], axis=1)
-            test_df = pd.concat([X_test, y_test_df], axis=1)
-
-            # Write the DataFrame to output file(s)
-            if output_format in ['hdf', 'both']:
-                hdf_path = './'+hdf_file_path if hdf_file_path.endswith('.hdf') else './'+ hdf_file_path + '.hdf'
-                print(f"Writing complete training data to HDF5 file: '{hdf_path}'...")
-                test_hdf_path = './'+hdf_file_path+'_test' if hdf_file_path.endswith('.hdf') else './'+ hdf_file_path + '_test.hdf'
-                train_df.to_hdf(hdf_path, key=hdf_dataset_name, mode='w', format='table', data_columns=True)
-                test_df.to_hdf(test_hdf_path, key=hdf_dataset_name, mode='w', format='table', data_columns=True)
-
-                print("Successfully saved complete training set to HDF5.")
-                print("Note: The test set was generated but not saved, as per the request.")
+        elif X_train[col].dtype == "category":
+            # 填充缺失值
+            X_train[col] = X_train[col].cat.add_categories(["missing"]).fillna("missing")
+            X_test[col] = X_test[col].cat.add_categories(["missing"]).fillna("missing")
+            X_val[col] = X_val[col].cat.add_categories(["missing"]).fillna("missing")
+            # Label Encoding（训练和测试统一编码）
+            le = LabelEncoder()
+            le.fit(pd.concat([X_train[col].astype(str), X_test[col].astype(str)], axis=0))
+            X_train[col] = le.transform(X_train[col].astype(str))
+            X_test[col] = le.transform(X_test[col].astype(str))
+            X_val[col] = le.transform(X_val[col].astype(str))
         
         else:
-            # If no target column was specified, save the whole preprocessed DataFrame
-            print("\nNo target column specified. Saving the entire preprocessed DataFrame.")
-            if output_format in ['hdf', 'both']:
-                hdf_path = hdf_file_path if hdf_file_path.endswith('.hdf') else hdf_file_path + '.hdf'
-                X.to_hdf(hdf_path, key=hdf_dataset_name, mode='w', format='table', data_columns=True)
-                print("Successfully saved to HDF5.")
+            # 数值列填充缺失值（用中位数更稳健）
+            median_val = X_train[col].median()
+            X_train[col] = X_train[col].fillna(median_val)
+            X_test[col] = X_test[col].fillna(median_val)
+            X_val[col] = X_val[col].fillna(median_val)
 
-            if output_format in ['csv', 'both']:
-                csv_path = hdf_file_path if hdf_file_path.endswith('.csv') else hdf_file_path + '.csv'
-                X.to_csv(csv_path, index=False)
-                print("Successfully saved to CSV.")
+    # model = RandomForestClassifier(random_state=42)
+    # model.fit(X_train, y_train)
+    # # 预测
+    # y_pred = model.predict(X_val)
+    # accuracy = accuracy_score(y_val, y_pred)
+    # print(f"val accuracy = {accuracy}")
 
-        print("\nPreprocessing and data splitting completed successfully!")
+    # ========= 拼回 target =========
+    X_train[target] = y_train
+    X_test[target] = y_test
+    X_val[target] = y_val
 
-    except FileNotFoundError:
-        print(f"Error: The file '{csv_file_path}' was not found.")
-    except pd.errors.EmptyDataError:
-        print(f"Error: The CSV file '{csv_file_path}' is empty.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        import traceback
-        traceback.print_exc()
+    # ========= 最终 CSV =========
+    train_out = os.path.join(f"{data_name}_train.csv")
+    test_out = os.path.join(f"{data_name}_test.csv")
+    val_out = os.path.join(f"{data_name}_val.csv")
 
-# --- Simplified Example Usage ---
+    X_train.to_csv(train_out, index=False)
+    X_test.to_csv(test_out, index=False)
+    X_val.to_csv(val_out, index=False)
+
+    print(f"✅ 训练集已保存: {train_out}")
+    print(f"✅ 测试集已保存: {test_out}")
+    print(f"✅ 验证集已保存: {val_out}")
+
+
 if __name__ == "__main__":
-    # This example requires a 'vehicle.csv' file in the same directory.
-    # Make sure to replace 'target_column_name' with the actual column name.
-    
-    csv_file = "./tabular_data/electricity.csv"
-    output_file = "electricity"
-    features_dataset = "electricity"
-    target_column = "target" # IMPORTANT: CHANGE THIS TO YOUR ACTUAL TARGET COLUMN
+    csv_file = "wine_quality"
+    task_type = 0
+    seed = 2
+    test_size = 0.2
 
-    print("Starting simplified CSV conversion and splitting...")
-    
-    # Example for a classification task (stratify is used)
-    csv_split(
-        csv_file_path=csv_file,
-        hdf_file_path=output_file,
-        hdf_dataset_name=features_dataset,
-        target_col=target_column,
-        fillna_method='auto',
-        output_format='hdf',
-        handle_categorical='auto',
-        test_size=0.2,
-        seed=2,
-        task_type=1 # Use 1 for classification
+    split_csv(
+        data_name=csv_file,
+        task_type=task_type,
+        seed=seed,
+        test_size=test_size
     )
-    
-print("\nConversion and preprocessing process finished!")

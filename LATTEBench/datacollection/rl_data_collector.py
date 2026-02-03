@@ -688,6 +688,17 @@ def model_train(param, nni):
                  format(mse0_test, mse1_test))
             info('[SEPARATE TEST] 1-RMSE on original is: {:.5f}, 1-RMSE on generated is: {:.5f}'.
                  format(rmse0_test, rmse1_test))
+
+            # Add TabularPredictor evaluation for regression
+            info('========== TabularPredictor Evaluation on Separate Test Set ==========')
+            mae0_test_ag, mse0_test_ag, rmse0_test_ag = test_task_separate_ag(D_original_train, D_original_val, D_original_test, task=task_name)
+            mae1_test_ag, mse1_test_ag, rmse1_test_ag = test_task_separate_ag(D_OPT_train, D_OPT_val, D_OPT_test, task=task_name)
+            info('[SEPARATE TEST AG] 1-MAE on original is: {:.5f}, 1-MAE on generated is: {:.5f}'.
+                 format(mae0_test_ag if mae0_test_ag is not None else 0.0, mae1_test_ag if mae1_test_ag is not None else 0.0))
+            info('[SEPARATE TEST AG] 1-MSE on original is: {:.5f}, 1-MSE on generated is: {:.5f}'.
+                 format(mse0_test_ag if mse0_test_ag is not None else 0.0, mse1_test_ag if mse1_test_ag is not None else 0.0))
+            info('[SEPARATE TEST AG] 1-RMSE on original is: {:.5f}, 1-RMSE on generated is: {:.5f}'.
+                 format(rmse0_test_ag if rmse0_test_ag is not None else 0.0, rmse1_test_ag if rmse1_test_ag is not None else 0.0))
         elif task_name == 'cls':
             acc0_test, precision0_test, recall0_test, f1_0_test = test_task_separate(D_original_train, D_original_test, task=task_name)
             acc1_test, precision1_test, recall1_test, f1_1_test = test_task_separate(D_OPT_train, D_OPT_test, task=task_name)

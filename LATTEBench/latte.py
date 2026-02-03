@@ -60,7 +60,7 @@ def parse_arguments():
     parser.add_argument('--history', type=int, default=1)
     parser.add_argument('--top', type=int, default=0,
                         help='Whether to use top-k history from ScoreStore (1=yes, 0=no)')
-    parser.add_argument('--iter', type=int, default=50)
+    parser.add_argument('--iter', type=int, default=10)
 
     # Preprocess
     parser.add_argument('--task_type', type=int, default=1)
@@ -496,8 +496,12 @@ def run_OPROc(args, logger, df_train, target, task_type, k):
         logger.info(f"========== Iteration {i+1}/{args.iter} ==========")
 
         train_data_iter, val_data_iter, test_data_iter = Evaluator.load_dataset(args.data_name)
-        xtrain, ytrain, xval, yval, xtest, ytest, _, _ = utils_oct.preprocess_dataframe(
+        xtrain, ytrain, xval, yval, xtest, ytest, feature_names_iter, _ = utils_oct.preprocess_dataframe(
             train_data_iter, val_data_iter, test_data_iter, target)
+
+        # Update num_features to match current data (may change due to feature selection)
+        num_features = len(feature_names_iter)
+        logger.info(f"Current number of features: {num_features}")
 
         if task_type == 1:
             from sklearn.ensemble import RandomForestClassifier

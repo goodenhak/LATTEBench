@@ -79,7 +79,7 @@ DEFAULT_CONFIG = {
     'enlarge_num': 3,
 
     # Iteration counts (per method)
-    'iter': 50,
+    'iter': 10,
 
     # CoT specific
     'history': 1,
@@ -125,13 +125,13 @@ METHOD_OUTPUT_FORMATS = {
 
 # Method-specific iteration recommendations
 METHOD_ITERATIONS = {
-    'CoT': 50,
-    'Critic': 50,
+    'CoT': 10,
+    'Critic': 10,
     'OPROc': 10,  # Each iteration has multiple dialogue turns
     'OPRO': 10,   # Each iteration has multiple dialogue turns
-    'ECoT': 50,
-    'Evo': 100,   # Evolution needs more iterations
-    'ToT': 1,     # ToT does tree search internally
+    'ECoT': 10,
+    'Evo': 10,
+    'ToT': 1,     # ToT uses max_steps (default 5), not iterations
 }
 
 
@@ -390,27 +390,28 @@ _ISSUE_PATTERN = re.compile(r' - ERROR - | - WARNING - |Warning:')
 # Methods that use dialogue turns within iterations
 _DIALOGUE_METHODS = {'OPRO', 'OPROc'}
 
-# Methods that use steps instead of iterations
-_STEP_METHODS = {'ToT'}
-
 # Methods that use transformation-based success counting
 _TRANSFORMATION_METHODS = {'ECoT', 'Evo'}
+
+# Methods that use generate thoughts markers (ToT)
+_THOUGHT_METHODS = {'ToT'}
 
 
 def parse_log_success_rate(log_filepath: str, method: str) -> Optional[Dict[str, Any]]:
     """
-    Parse a log file to calculate per-iteration/step success rate.
+    Parse a log file to calculate per-iteration success rate.
 
-    An iteration/step is considered successful if it contains no Error/Warning.
+    An iteration is considered successful if it contains no Error/Warning.
     For OPRO/OPROc (dialogue methods), an iteration is successful as long as
     at least one dialogue turn within it has no Error/Warning.
-    For ToT, success rate is calculated based on steps instead of iterations.
     For ECoT/Evo, success rate is based on "new transformation found" vs
     "no valid transformation" counts.
+    For ToT, each "generate thoughts" block (LLM call) is counted.
+    For CoT, Critic, etc., each iteration (LLM output) is counted.
 
     Returns a dict with:
-        - total_iters: Total number of iterations/steps/transformations
-        - success_iters: Number of successful iterations/steps/transformations
+        - total_iters: Total number of iterations/transformations
+        - success_iters: Number of successful iterations/transformations
         - success_rate: success_iters / total_iters
     Returns None if the log file doesn't exist or execution failed.
     """
@@ -431,26 +432,26 @@ def parse_log_success_rate(log_filepath: str, method: str) -> Optional[Dict[str,
             total_iters = success_count + failure_count
             success_iters = success_count
 
-        # ToT uses steps instead of iterations
-        elif method in _STEP_METHODS:
-            # Split by step markers: ---step {step}, depth {depth}---
-            step_splits = re.split(r'---step \d+, depth \d+---', content)
+        # ToT: split by "---generate thoughts---" markers (each LLM call)
+        elif method in _THOUGHT_METHODS:
+            thought_splits = re.split(r'---generate thoughts---', content)
 
-            if len(step_splits) <= 1:
-                # No step markers: treat entire body as one step
-                step_blocks = [content]
+            if len(thought_splits) <= 1:
+                # No thought markers: treat entire body as one block
+                thought_blocks = [content]
             else:
-                # First element is preamble before the first step; skip it
-                step_blocks = step_splits[1:]
+                # First element is preamble before the first thought generation; skip it
+                thought_blocks = thought_splits[1:]
 
-            total_iters = len(step_blocks)
+            total_iters = len(thought_blocks)
             success_iters = 0
 
-            for block in step_blocks:
+            for block in thought_blocks:
                 if not _ISSUE_PATTERN.search(block):
                     success_iters += 1
+
         else:
-            # Split by iteration markers
+            # Default: Split by iteration markers (CoT, Critic, etc.)
             iter_splits = re.split(r'={5,} Iteration \d+/\d+ ={5,}', content)
 
             if len(iter_splits) <= 1:
