@@ -158,10 +158,10 @@ class Serializer:
         task_desc = task_list[self.data_name]
         # load data
         data = pd.read_csv(f"./tmp/{self.data_name}/train.csv")
-        # 检测分类特征
+        # Detect categorical features
         is_cat = [
-            pd.api.types.is_string_dtype(dt) or 
-            pd.api.types.is_categorical_dtype(dt) or 
+            pd.api.types.is_string_dtype(dt) or
+            pd.api.types.is_categorical_dtype(dt) or
             pd.api.types.is_bool_dtype(dt)
             for dt in data.dtypes.tolist()
         ][:-1]
@@ -207,29 +207,29 @@ class Serializer:
         return prompt_list
     
     def generate_prompt_components(self):
-        # 获取任务描述
+        # Get task description
         with open("task_descriptions.json", "r") as f:
             task_list = json.load(f)
         task_desc = task_list[self.data_name]
-        
-        # 获取特征元数据
+
+        # Get feature metadata
         data = pd.read_csv(f"./tmp/{self.data_name}/train.csv")
-        # 检测分类特征
+        # Detect categorical features
         is_cat = [
-            pd.api.types.is_string_dtype(dt) or 
-            pd.api.types.is_categorical_dtype(dt) or 
+            pd.api.types.is_string_dtype(dt) or
+            pd.api.types.is_categorical_dtype(dt) or
             pd.api.types.is_bool_dtype(dt)
             for dt in data.dtypes.tolist()
         ][:-1]
         metadata = self.get_metadata(data, is_cat)
-        
-        # 获取数据示例
+
+        # Get data samples
         if self.sample_size == 0:
             data_sample = ""
         else:
             data_sample_list = self.get_samples(data)
             data_sample = data_sample_list[0] if data_sample_list else ""
-        
+
         return task_desc, metadata, data_sample
     
     def generate_critic_prompt(self):
@@ -240,10 +240,10 @@ class Serializer:
         task_desc = task_list[self.data_name]
         # load data
         data = pd.read_csv(f"./tmp/{self.data_name}/train.csv")
-        # 检测分类特征
+        # Detect categorical features
         is_cat = [
-            pd.api.types.is_string_dtype(dt) or 
-            pd.api.types.is_categorical_dtype(dt) or 
+            pd.api.types.is_string_dtype(dt) or
+            pd.api.types.is_categorical_dtype(dt) or
             pd.api.types.is_bool_dtype(dt)
             for dt in data.dtypes.tolist()
         ][:-1]

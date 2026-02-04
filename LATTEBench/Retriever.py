@@ -5,16 +5,16 @@ from zss import Node, simple_distance
 import graphviz
 
 def get_semantic_embedding(text):
-    """获取文本的语义嵌入向量"""
-    # 使用预训练模型获取文本嵌入
+    """Get semantic embedding vector for text"""
+    # Use pre-trained model to get text embedding
     model = SentenceTransformer('all-MiniLM-L6-v2')
     embedding = model.encode(text)
     return embedding
 
 def calculate_cosine_similarity(embedding1, embedding2):
-    """计算两个嵌入向量之间的余弦相似度"""
+    """Calculate cosine similarity between two embedding vectors"""
     similarity = cosine_similarity(
-        embedding1.reshape(1, -1), 
+        embedding1.reshape(1, -1),
         embedding2.reshape(1, -1)
     )
     return similarity[0][0]
@@ -59,7 +59,7 @@ def get_top_k_similar_nodes(history_nodes, query_node, k=3, embedding_cache=None
     return sim_node[:k]
 
 
-# 提取列名（包括 df['a'] 或 df[['a', 'b']]）
+# Extract column names (including df['a'] or df[['a', 'b']])
 def extract_column(node):
     if isinstance(node.slice, ast.Constant):
         return [node.slice.value]
@@ -67,7 +67,7 @@ def extract_column(node):
         return [elt.value for elt in node.slice.elts if isinstance(elt, ast.Constant)]
     return ["?"]
 
-# 表达式转树（支持变量替换、链式方法、numpy、rolling等）
+# Expression to tree (supports variable substitution, chained methods, numpy, rolling, etc.)
 def expr_to_tree(expr, var_map=None, visited_vars=None, depth=0, max_depth=50):
     if var_map is None:
         var_map = {}
@@ -131,13 +131,13 @@ def expr_to_tree(expr, var_map=None, visited_vars=None, depth=0, max_depth=50):
 
     return Node("?")
 
-# 提取所有语义树（支持变量赋值再引用）
+# Extract all semantic trees (supports variable assignment and reference)
 def extract_all_trees(code):
     tree = ast.parse(code)
     var_map = {}
     trees = []
 
-    for stmt in tree.body[0].body:  # 假设代码中只有一个函数
+    for stmt in tree.body[0].body:  # Assume only one function in the code
         if isinstance(stmt, ast.Assign):
             target = stmt.targets[0]
             value = stmt.value
@@ -147,7 +147,7 @@ def extract_all_trees(code):
                 var_map[target.id] = value
     return trees
 
-# 计算总树编辑距离
+# Calculate total tree edit distance
 def total_tree_edit_distance(code1, code2):
     trees1 = extract_all_trees(code1)
     trees2 = extract_all_trees(code2)
@@ -160,7 +160,7 @@ def total_tree_edit_distance(code1, code2):
         total += simple_distance(t1, t2)
     return total
 
-# 将单棵 zss.Node 树转为 Graphviz DOT 格式
+# Convert single zss.Node tree to Graphviz DOT format
 def visualize_tree_zss(node, name="Tree"):
     dot = graphviz.Digraph(name)
     node_id = 0
@@ -182,36 +182,36 @@ def visualize_tree_zss(node, name="Tree"):
     return dot
 
 def load_history_nodes(data_name):
-    """从./tmp/{data_name}/目录加载历史节点的数据"""
+    """Load history node data from ./tmp/{data_name}/ directory"""
     history_nodes = []
     data_dir = f"./tmp/{data_name}/"
-    
+
     if not os.path.exists(data_dir):
         raise FileNotFoundError(f"Directory {data_dir} not found")
-    
-    # 获取所有匹配_iter_{i}的文件并按迭代编号分组
+
+    # Get all files matching _iter_{i} and group by iteration number
     file_groups = {}
     for filename in os.listdir(data_dir):
         match = re.search(r'_iter_(\d+)\.(json|py)$', filename)
         if match:
-            iter_num = int(match.group(1))  # 转换为整数以便排序
+            iter_num = int(match.group(1))  # Convert to int for sorting
             ext = match.group(2)
             if iter_num not in file_groups:
                 file_groups[iter_num] = {}
             file_groups[iter_num][ext] = os.path.join(data_dir, filename)
-    
-    # 按iteration编号升序处理成对的json和py文件
+
+    # Process paired json and py files in ascending order by iteration number
     for iter_num in sorted(file_groups.keys()):
         files = file_groups[iter_num]
-        if 'json' in files and 'py' in files:  # 确保有配对的json和py文件
+        if 'json' in files and 'py' in files:  # Ensure paired json and py files exist
             try:
-                # 加载metadata
+                # Load metadata
                 with open(files['json'], 'r') as f:
                     metadata = json.load(f)
-                # 加载code
+                # Load code
                 with open(files['py'], 'r') as f:
                     code = f.read()
-                # 创建节点
+                # Create node
                 node_data = {
                     'metadata': metadata,
                     'code': code
@@ -221,5 +221,5 @@ def load_history_nodes(data_name):
                 print(f"Warning: Could not process iteration {iter_num}: {str(e)}")
         else:
             print(f"Warning: Missing pair for iteration {iter_num}")
-    
+
     return history_nodes

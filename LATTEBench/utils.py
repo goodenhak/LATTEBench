@@ -11,11 +11,11 @@ import shutil
 from pathlib import Path
 
 def remove_bold(line: str) -> str:
-    # 去除 Markdown 粗體標記 **
+    # Remove Markdown bold markers **
     line = re.sub(r"\*\*", "", line)
-    # 去除引号
+    # Remove quotation marks
     line = re.sub(r"\"", "", line)
-    # 去除`
+    # Remove backticks
     line = re.sub(r"\`", "", line)
     return line.strip()
 
@@ -28,20 +28,20 @@ def read_txt_to_list(filename):
     result = []
     with open(filename, 'r', encoding='utf-8') as file:
         for line in file:
-            # 去除换行符和空白，按逗号分割，并去掉空项
+            # Remove newline and whitespace, split by comma, and filter empty items
             items = [item.strip() for item in line.strip().split(',') if item.strip()]
             result.extend(items)
     return result
 
 def extract_json_content(raw_string):
-    # 查找第一个 { 和最后一个 } 的位置
+    # Find the position of the first { and last }
     start = raw_string.find('{')
     end = raw_string.rfind('}')
-    
+
     if start == -1 or end == -1:
-        raise ValueError("字符串中未找到有效的 {} 包裹的JSON内容")
-    
-    # 提取内容（包含{}）
+        raise ValueError("No valid JSON content wrapped in {} found in string")
+
+    # Extract content (including {})
     return raw_string[start:end+1]
 
 def get_data_samples(df_sampled, target):
@@ -164,26 +164,27 @@ def copy_and_rename_metadata(data_name):
     dst_dir = Path(f"./tmp/{data_name}")
     dst_file = dst_dir / "metadata.json"
 
-    # 确保源文件存在
+    # Ensure source file exists
     if not src_file.exists():
-        raise FileNotFoundError(f"源文件不存在: {src_file}")
+        raise FileNotFoundError(f"Source file does not exist: {src_file}")
 
-    # 创建目标目录（如果不存在）
+    # Create destination directory (if it doesn't exist)
     dst_dir.mkdir(parents=True, exist_ok=True)
 
-    # 拷贝并重命名
+    # Copy and rename
     shutil.copy(src_file, dst_file)
-    print(f"已将 {src_file} 拷贝到 {dst_file}")
+    print(f"Copied {src_file} to {dst_file}")
 
 def clear_files(directory):
     """
-    清空指定目录及其子目录下与 filenames 中指定名称相符的文件内容。
-    
-    :param directory: 目标文件夹路径
-    :param filenames: 要清空的文件名列表（精确匹配）
+    Clear the contents of files in the specified directory and subdirectories
+    that match the filenames list.
+
+    :param directory: Target folder path
+    :param filenames: List of file names to clear (exact match)
     """
     if not os.path.isdir(directory):
-        print(f"目录不存在: {directory}")
+        print(f"Directory does not exist: {directory}")
         return
     filenames = ["best_train.csv","best_test.csv","feature_generation.py","full_code.py","metadata.json","train.csv","val.csv","test.csv"]
     cleared_files = 0
@@ -193,22 +194,22 @@ def clear_files(directory):
                 file_path = os.path.join(root, file)
                 try:
                     open(file_path, 'w').close()
-                    print(f"已清空: {file_path}")
+                    print(f"Cleared: {file_path}")
                     cleared_files += 1
                 except Exception as e:
-                    print(f"无法清空 {file_path}: {e}")
+                    print(f"Failed to clear {file_path}: {e}")
 
-    print(f"共清空 {cleared_files} 个文件。")
+    print(f"Cleared {cleared_files} file(s) in total.")
 
 def drop_duplicate_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
-    检查并删除DataFrame中重复的列名，只保留第一次出现的列。
-    
-    参数:
-        df (pd.DataFrame): 输入的DataFrame
-    
-    返回:
-        pd.DataFrame: 删除重复列后的DataFrame
+    Check and remove duplicate column names from DataFrame, keeping only the first occurrence.
+
+    Args:
+        df (pd.DataFrame): Input DataFrame
+
+    Returns:
+        pd.DataFrame: DataFrame with duplicate columns removed
     """
-    # 利用pandas的Index.duplicated方法检测重复列名
+    # Use pandas Index.duplicated method to detect duplicate column names
     return df.loc[:, ~df.columns.duplicated()]

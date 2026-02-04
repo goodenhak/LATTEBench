@@ -10,53 +10,53 @@ class ScoreStore:
         self._create_table()
 
     def _create_table(self):
-        """创建数据库表，包含id、metadata、thought、score和structure字段"""
+        """Create database table with id, metadata, thought, score, and structure fields"""
         self.cur.execute("""
         CREATE TABLE IF NOT EXISTS plans (
             id TEXT PRIMARY KEY,
             metadata TEXT,
             thought TEXT,
             score REAL,
-            structure TEXT  -- 存储JSON序列化后的字符串列表
+            structure TEXT  -- Stores JSON serialized string list
         )
         """)
         self.conn.commit()
 
     def clear_table_data(self, db_path, table_name):
-        """清空指定表的数据"""
+        """Clear data from specified table"""
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-        
+
         try:
             cursor.execute(f"DELETE FROM {table_name};")
             conn.commit()
-            print(f"表 {table_name} 的数据已清空")
-            
+            print(f"Data in table {table_name} has been cleared")
+
         except sqlite3.Error as e:
-            print(f"清空数据时出错: {e}")
+            print(f"Error clearing data: {e}")
             conn.rollback()
         finally:
             conn.close()
 
     def add(self, metadata: Dict[str, Any], thought: List[Dict[str, Any]], score: float, structure: List[str] = None) -> str:
         """
-        存储metadata(dict)、thought(dict list)、score和structure，并返回它的id(秒级时间戳)
-        
-        参数:
-            metadata: 元数据字典
-            thought: 思考过程字典列表
-            score: 分数
-            structure: 结构信息字符串列表
-            
-        返回:
-            记录的ID（时间戳）
+        Store metadata(dict), thought(dict list), score and structure, and return its id (second-level timestamp)
+
+        Args:
+            metadata: Metadata dictionary
+            thought: Thinking process dictionary list
+            score: Score value
+            structure: Structure information string list
+
+        Returns:
+            Record ID (timestamp)
         """
-        ts = str(int(time.time()))  # 秒级时间戳
-        
-        # 将dict和dict list序列化为JSON字符串
+        ts = str(int(time.time()))  # Second-level timestamp
+
+        # Serialize dict and dict list to JSON string
         metadata_json = json.dumps(metadata)
         thought_json = json.dumps(thought)
-        # 将字符串列表序列化为JSON字符串
+        # Serialize string list to JSON string
         structure_json = json.dumps(structure) if structure is not None else "[]"
 
         try:
@@ -66,8 +66,8 @@ class ScoreStore:
             )
             self.conn.commit()
         except sqlite3.IntegrityError:
-            # 如果该秒已经存在一条数据，可以在id后追加一个自增后缀
-            ts = ts + "_" + str(int(time.time() * 1000) % 1000)  # 追加毫秒后缀
+            # If a record already exists for this second, append an auto-increment suffix to id
+            ts = ts + "_" + str(int(time.time() * 1000) % 1000)  # Append millisecond suffix
             self.cur.execute(
                 "INSERT INTO plans (id, metadata, thought, score, structure) VALUES (?, ?, ?, ?, ?)",
                 (ts, metadata_json, thought_json, score, structure_json)
@@ -77,19 +77,19 @@ class ScoreStore:
 
     def top_k(self, k: int = 10):
         """
-        返回按score排序的前k个记录，metadata、thought和structure已反序列化
-        
-        参数:
-            k: 返回的记录数量
-            
-        返回:
-            包含(metadata, thought, score, structure)的元组列表
+        Return top k records sorted by score, metadata, thought, and structure are deserialized
+
+        Args:
+            k: Number of records to return
+
+        Returns:
+            Tuple list containing (metadata, thought, score, structure)
         """
         self.cur.execute(
             "SELECT metadata, thought, score, structure FROM plans ORDER BY score DESC LIMIT ?", (k,)
         )
         rows = self.cur.fetchall()
-        # 反序列化JSON字符串为原始数据类型
+        # Deserialize JSON strings to original data types
         rpns = []
         scores = []
         thoughts = []
@@ -102,47 +102,47 @@ class ScoreStore:
 
     def load(self, id_: str):
         """
-        根据id加载记录，metadata、thought和structure已反序列化
-        
-        参数:
-            id_: 记录ID
-            
-        返回:
-            包含(metadata, thought, score, structure)的元组，如果不存在则返回None
+        Load record by id, metadata, thought, and structure are deserialized
+
+        Args:
+            id_: Record ID
+
+        Returns:
+            Tuple containing (metadata, thought, score, structure), or None if not exists
         """
         self.cur.execute("SELECT metadata, thought, score, structure FROM plans WHERE id=?", (id_,))
         row = self.cur.fetchone()
         if row:
             metadata, thought, score, structure = row
             return (
-                json.loads(metadata), 
-                json.loads(thought), 
-                score, 
-                json.loads(structure)  # 反序列化为字符串列表
+                json.loads(metadata),
+                json.loads(thought),
+                score,
+                json.loads(structure)  # Deserialize to string list
             )
         return None
 
     def all(self):
         """
-        返回所有记录，按score降序，metadata、thought和structure已反序列化
-        
-        返回:
-            包含(metadata, thought, score, structure)的元组列表
+        Return all records, sorted by score descending, metadata, thought, and structure are deserialized
+
+        Returns:
+            Tuple list containing (metadata, thought, score, structure)
         """
         self.cur.execute("SELECT metadata, thought, score, structure FROM plans ORDER BY score DESC")
         rows = self.cur.fetchall()
-        # 反序列化JSON字符串为原始数据类型
+        # Deserialize JSON strings to original data types
         result = []
         for row in rows:
             metadata, thought, score, structure = row
             result.append((
-                json.loads(metadata), 
-                json.loads(thought), 
-                score, 
-                json.loads(structure)  # 反序列化为字符串列表
+                json.loads(metadata),
+                json.loads(thought),
+                score,
+                json.loads(structure)  # Deserialize to string list
             ))
         return result
 
     def close(self):
-        """关闭数据库连接"""
+        """Close database connection"""
         self.conn.close()

@@ -6,10 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 def split_and_prepare_data(data_name, task_type, seed, test_size=0.2, val_size=None):
-    # 读取数据
+    # Read data
     df = pd.read_csv(os.path.join('tabular_data', data_name + '.csv'))
 
-    # 获取目标列名并重命名为 "target"
+    # Get target column name and rename to "target"
     original_target = df.columns[-1]
     df = df.rename(columns={original_target: "target"})
 
@@ -21,12 +21,12 @@ def split_and_prepare_data(data_name, task_type, seed, test_size=0.2, val_size=N
     df.to_csv(os.path.join('tmp', data_name, data_name + '.csv'), index=False)
     target = df.columns[-1]
 
-    # 分离特征和目标变量
+    # Separate features and target variable
     X = df.convert_dtypes()
     y = df[target].to_numpy()
     X = X.drop(target, axis=1)
-    
-    # 划分训练集和测试集
+
+    # Split into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
@@ -35,7 +35,7 @@ def split_and_prepare_data(data_name, task_type, seed, test_size=0.2, val_size=N
         stratify=y if task_type == 1 else None
     )
 
-    # 如果需要划分验证集
+    # If validation set split is needed
     if val_size is not None:
         val_ratio = val_size / (1 - test_size)
         X_train, X_val, y_train, y_val = train_test_split(
@@ -46,7 +46,7 @@ def split_and_prepare_data(data_name, task_type, seed, test_size=0.2, val_size=N
             stratify=y_train if task_type == 1 else None
         )
 
-    # 获取标签列表（仅分类任务）
+    # Get label list (classification task only)
     label_list = np.unique(y).tolist() if task_type == 1 else None
 
     # save training set and test set

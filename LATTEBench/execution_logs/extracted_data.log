@@ -1,0 +1,785 @@
+
+======== Main_Results/OGR/vehicle_CoT_gpt-4o_3_1.log ========
+2026-01-27 01:26:18,227 - INFO - Turn 1 Val Acc: 0.7337, Test Acc: 0.7647
+2026-01-27 01:26:20,227 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7765
+2026-01-27 01:26:22,124 - INFO - Turn 3 Val Acc: 0.7396, Test Acc: 0.7471
+2026-01-27 01:26:23,760 - INFO - Turn 4 Val Acc: 0.7219, Test Acc: 0.7765
+2026-01-27 01:26:25,306 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7412
+2026-01-27 01:26:27,633 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7294
+2026-01-27 01:26:30,457 - INFO - Turn 7 Val Acc: 0.7456, Test Acc: 0.7529
+2026-01-27 01:26:32,199 - INFO - Turn 8 Val Acc: 0.7456, Test Acc: 0.7588
+2026-01-27 01:26:34,452 - INFO - Turn 9 Val Acc: 0.7396, Test Acc: 0.7294
+2026-01-27 01:26:37,575 - INFO - Turn 10 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:26:37,737 - INFO - Best dialogue result - Val Acc: 0.7574, Test Acc: 0.7765
+2026-01-27 01:26:38,614 - INFO - After selection - Val Acc: 0.7396, Test Acc: 0.7353
+2026-01-27 01:26:38,626 - INFO - Total token usage = 26395
+2026-01-27 01:26:40,559 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7412
+2026-01-27 01:26:42,308 - INFO - Turn 2 Val Acc: 0.7515, Test Acc: 0.8000
+2026-01-27 01:26:44,471 - INFO - Turn 3 Val Acc: 0.7633, Test Acc: 0.7294
+2026-01-27 01:26:46,196 - INFO - Turn 4 Val Acc: 0.7456, Test Acc: 0.7471
+2026-01-27 01:26:47,661 - INFO - Turn 5 Val Acc: 0.7278, Test Acc: 0.7471
+2026-01-27 01:26:49,835 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7294
+2026-01-27 01:26:51,347 - INFO - Turn 7 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:26:53,354 - INFO - Turn 8 Val Acc: 0.7396, Test Acc: 0.7353
+2026-01-27 01:26:55,395 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7176
+2026-01-27 01:26:57,124 - INFO - Turn 10 Val Acc: 0.7456, Test Acc: 0.7588
+2026-01-27 01:26:57,290 - INFO - Best dialogue result - Val Acc: 0.7633, Test Acc: 0.7412
+2026-01-27 01:26:58,253 - INFO - After selection - Val Acc: 0.7515, Test Acc: 0.7471
+2026-01-27 01:26:58,268 - INFO - Total token usage = 60487
+2026-01-27 01:27:00,133 - INFO - Turn 1 Val Acc: 0.7219, Test Acc: 0.7412
+2026-01-27 01:27:01,642 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7706
+2026-01-27 01:27:03,339 - INFO - Turn 3 Val Acc: 0.7278, Test Acc: 0.7235
+2026-01-27 01:27:05,526 - INFO - Turn 4 Val Acc: 0.7396, Test Acc: 0.7765
+2026-01-27 01:27:07,123 - INFO - Turn 5 Val Acc: 0.7456, Test Acc: 0.7529
+2026-01-27 01:27:09,083 - INFO - Turn 6 Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:27:10,910 - INFO - Turn 7 Val Acc: 0.7396, Test Acc: 0.7412
+2026-01-27 01:27:12,851 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:27:14,726 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7471
+2026-01-27 01:27:16,367 - INFO - Turn 10 Val Acc: 0.7515, Test Acc: 0.7647
+2026-01-27 01:27:16,552 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:27:17,607 - INFO - After selection - Val Acc: 0.7929, Test Acc: 0.7765
+2026-01-27 01:27:17,625 - INFO - Total token usage = 99995
+2026-01-27 01:27:19,873 - INFO - Turn 1 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:27:21,904 - INFO - Turn 2 Val Acc: 0.7456, Test Acc: 0.7588
+2026-01-27 01:27:23,822 - INFO - Turn 3 Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:27:25,513 - INFO - Turn 4 Val Acc: 0.7751, Test Acc: 0.7647
+2026-01-27 01:27:27,507 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7765
+2026-01-27 01:27:29,492 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:27:32,246 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7471
+2026-01-27 01:27:34,090 - INFO - Turn 8 Val Acc: 0.7633, Test Acc: 0.7647
+2026-01-27 01:27:35,724 - INFO - Turn 9 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:27:38,698 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7706
+2026-01-27 01:27:38,883 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:27:39,957 - INFO - After selection - Val Acc: 0.7811, Test Acc: 0.7529
+2026-01-27 01:27:39,966 - INFO - Total token usage = 140851
+2026-01-27 01:27:41,923 - INFO - Turn 1 Val Acc: 0.7751, Test Acc: 0.7765
+2026-01-27 01:27:43,745 - INFO - Turn 2 Val Acc: 0.7751, Test Acc: 0.7824
+2026-01-27 01:27:45,553 - INFO - Turn 3 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:27:47,615 - INFO - Turn 4 Val Acc: 0.7692, Test Acc: 0.8000
+2026-01-27 01:27:49,375 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:27:51,293 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7471
+2026-01-27 01:27:52,980 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:27:54,853 - INFO - Turn 8 Val Acc: 0.7870, Test Acc: 0.7412
+2026-01-27 01:27:56,522 - INFO - Turn 9 Val Acc: 0.7574, Test Acc: 0.7882
+2026-01-27 01:27:58,738 - INFO - Turn 10 Val Acc: 0.7929, Test Acc: 0.7471
+2026-01-27 01:27:58,922 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7471
+2026-01-27 01:28:00,005 - INFO - After selection - Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:28:00,014 - INFO - Total token usage = 181645
+2026-01-27 01:28:02,138 - INFO - Turn 1 Val Acc: 0.7515, Test Acc: 0.7412
+2026-01-27 01:28:03,905 - INFO - Turn 2 Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:28:06,346 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:28:08,293 - INFO - Turn 4 Val Acc: 0.7515, Test Acc: 0.7471
+2026-01-27 01:28:10,207 - INFO - Turn 5 Val Acc: 0.7515, Test Acc: 0.7235
+2026-01-27 01:28:12,235 - INFO - Turn 6 Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:28:14,417 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7529
+2026-01-27 01:28:16,071 - INFO - Turn 8 Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:28:18,085 - INFO - Turn 9 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:28:20,313 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7706
+2026-01-27 01:28:20,494 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:28:21,221 - INFO - Total token usage = 222516
+2026-01-27 01:28:22,820 - INFO - Turn 1 Val Acc: 0.7751, Test Acc: 0.7353
+2026-01-27 01:28:24,664 - INFO - Turn 2 Val Acc: 0.8107, Test Acc: 0.7706
+2026-01-27 01:28:26,767 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7471
+2026-01-27 01:28:28,699 - INFO - Turn 4 Val Acc: 0.8047, Test Acc: 0.7294
+2026-01-27 01:28:31,076 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7412
+2026-01-27 01:28:33,132 - INFO - Turn 6 Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:28:35,205 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:28:36,934 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7647
+2026-01-27 01:28:38,720 - INFO - Turn 9 Val Acc: 0.7811, Test Acc: 0.7176
+2026-01-27 01:28:40,981 - INFO - Turn 10 Val Acc: 0.7574, Test Acc: 0.7529
+2026-01-27 01:28:41,164 - INFO - Best dialogue result - Val Acc: 0.8107, Test Acc: 0.7706
+2026-01-27 01:28:41,894 - INFO - Total token usage = 263428
+2026-01-27 01:28:44,184 - INFO - Turn 1 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:28:46,076 - INFO - Turn 2 Val Acc: 0.7692, Test Acc: 0.7471
+2026-01-27 01:28:48,067 - INFO - Turn 3 Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:28:50,362 - INFO - Turn 4 Val Acc: 0.7633, Test Acc: 0.7824
+2026-01-27 01:28:52,560 - INFO - Turn 5 Val Acc: 0.7870, Test Acc: 0.7824
+2026-01-27 01:28:54,498 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:28:56,542 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:28:58,296 - INFO - Turn 8 Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:29:00,526 - INFO - Turn 9 Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:29:02,631 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:29:02,814 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:29:03,922 - INFO - After selection - Val Acc: 0.7692, Test Acc: 0.7882
+2026-01-27 01:29:03,934 - INFO - Total token usage = 310899
+2026-01-27 01:29:05,926 - INFO - Turn 1 Val Acc: 0.7988, Test Acc: 0.7647
+2026-01-27 01:29:07,624 - INFO - Turn 2 Val Acc: 0.7692, Test Acc: 0.7706
+2026-01-27 01:29:09,442 - INFO - Turn 3 Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:29:12,195 - INFO - Turn 4 Val Acc: 0.7456, Test Acc: 0.7706
+2026-01-27 01:29:14,324 - INFO - Turn 5 Val Acc: 0.7515, Test Acc: 0.7706
+2026-01-27 01:29:16,279 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7353
+2026-01-27 01:29:18,692 - INFO - Turn 7 Val Acc: 0.7988, Test Acc: 0.7529
+2026-01-27 01:29:20,839 - INFO - Turn 8 Val Acc: 0.7633, Test Acc: 0.7706
+2026-01-27 01:29:22,856 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7706
+2026-01-27 01:29:24,842 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7294
+2026-01-27 01:29:25,028 - INFO - Best dialogue result - Val Acc: 0.7988, Test Acc: 0.7647
+2026-01-27 01:29:26,135 - INFO - After selection - Val Acc: 0.7751, Test Acc: 0.7471
+2026-01-27 01:29:26,147 - INFO - Total token usage = 358863
+2026-01-27 01:29:28,151 - INFO - Turn 1 Val Acc: 0.7811, Test Acc: 0.7529
+2026-01-27 01:29:30,096 - INFO - Turn 2 Val Acc: 0.7278, Test Acc: 0.7647
+2026-01-27 01:29:32,159 - INFO - Turn 3 Val Acc: 0.7751, Test Acc: 0.7882
+2026-01-27 01:29:34,416 - INFO - Turn 4 Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:29:37,017 - INFO - Turn 5 Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:29:38,884 - INFO - Turn 6 Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:29:41,124 - INFO - Turn 7 Val Acc: 0.7574, Test Acc: 0.7529
+2026-01-27 01:29:42,898 - INFO - Turn 8 Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:29:45,032 - INFO - Turn 9 Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:29:47,509 - INFO - Turn 10 Val Acc: 0.7811, Test Acc: 0.7471
+2026-01-27 01:29:47,692 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:29:48,492 - INFO - Total token usage = 406361
+2026-01-27 01:29:48,683 - INFO - Total token usage = 406361
+
+======== Main_Results/OGR/vehicle_CoT_gpt-4o_3_2.log ========
+2026-01-27 01:30:58,847 - INFO - Turn 1 Val Acc: 0.7278, Test Acc: 0.7647
+2026-01-27 01:31:00,954 - INFO - Turn 2 Val Acc: 0.7396, Test Acc: 0.7471
+2026-01-27 01:31:03,357 - INFO - Turn 3 Val Acc: 0.7396, Test Acc: 0.7529
+2026-01-27 01:31:05,292 - INFO - Turn 4 Val Acc: 0.7456, Test Acc: 0.7294
+2026-01-27 01:31:07,152 - INFO - Turn 5 Val Acc: 0.7456, Test Acc: 0.7471
+2026-01-27 01:31:09,171 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7588
+2026-01-27 01:31:11,094 - INFO - Turn 7 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:31:12,666 - INFO - Turn 8 Val Acc: 0.7337, Test Acc: 0.7412
+2026-01-27 01:31:16,075 - INFO - Turn 9 Val Acc: 0.7337, Test Acc: 0.7706
+2026-01-27 01:31:17,751 - INFO - Turn 10 Val Acc: 0.7811, Test Acc: 0.8000
+2026-01-27 01:31:17,906 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.8000
+2026-01-27 01:31:18,433 - INFO - Total token usage = 26403
+2026-01-27 01:31:20,907 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7353
+2026-01-27 01:31:22,800 - INFO - Turn 2 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:31:24,325 - INFO - Turn 3 Val Acc: 0.7456, Test Acc: 0.7588
+2026-01-27 01:31:26,375 - INFO - Turn 4 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:31:28,258 - INFO - Turn 5 Val Acc: 0.7278, Test Acc: 0.7647
+2026-01-27 01:31:31,229 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7647
+2026-01-27 01:31:32,840 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7765
+2026-01-27 01:31:34,695 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:31:40,069 - INFO - Turn 9 Val Acc: 0.7692, Test Acc: 0.7941
+2026-01-27 01:31:42,620 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7588
+2026-01-27 01:31:42,778 - INFO - Best dialogue result - Val Acc: 0.7692, Test Acc: 0.7765
+2026-01-27 01:31:43,668 - INFO - After selection - Val Acc: 0.7870, Test Acc: 0.7765
+2026-01-27 01:31:43,683 - INFO - Total token usage = 59918
+2026-01-27 01:31:45,738 - INFO - Turn 1 Val Acc: 0.7692, Test Acc: 0.7824
+2026-01-27 01:31:47,446 - INFO - Turn 2 Val Acc: 0.7751, Test Acc: 0.7765
+2026-01-27 01:31:49,180 - INFO - Turn 3 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:31:51,056 - INFO - Turn 4 Val Acc: 0.7988, Test Acc: 0.7647
+2026-01-27 01:31:52,947 - INFO - Turn 5 Val Acc: 0.7870, Test Acc: 0.7765
+2026-01-27 01:31:54,615 - INFO - Turn 6 Val Acc: 0.7456, Test Acc: 0.7706
+2026-01-27 01:31:56,642 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7765
+2026-01-27 01:31:59,036 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7765
+2026-01-27 01:32:01,313 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7765
+2026-01-27 01:32:04,555 - INFO - Turn 10 Val Acc: 0.7870, Test Acc: 0.7765
+2026-01-27 01:32:04,715 - INFO - Best dialogue result - Val Acc: 0.7988, Test Acc: 0.7647
+2026-01-27 01:32:05,520 - INFO - After selection - Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:32:05,538 - INFO - Total token usage = 91607
+2026-01-27 01:32:07,342 - INFO - Turn 1 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:32:09,320 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7765
+2026-01-27 01:32:11,125 - INFO - Turn 3 Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:32:13,382 - INFO - Turn 4 Val Acc: 0.7515, Test Acc: 0.7824
+2026-01-27 01:32:15,088 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7647
+2026-01-27 01:32:17,094 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7706
+2026-01-27 01:32:19,001 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7706
+2026-01-27 01:32:20,875 - INFO - Turn 8 Val Acc: 0.8047, Test Acc: 0.7647
+2026-01-27 01:32:22,516 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:32:24,261 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7647
+2026-01-27 01:32:24,427 - INFO - Best dialogue result - Val Acc: 0.8047, Test Acc: 0.7647
+2026-01-27 01:32:25,320 - INFO - After selection - Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:32:25,342 - INFO - Total token usage = 129046
+2026-01-27 01:32:27,499 - INFO - Turn 1 Val Acc: 0.7692, Test Acc: 0.7647
+2026-01-27 01:32:29,554 - INFO - Turn 2 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:32:31,233 - INFO - Turn 3 Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:32:33,154 - INFO - Turn 4 Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:32:35,062 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7882
+2026-01-27 01:32:39,600 - INFO - Turn 6 Val Acc: 0.7574, Test Acc: 0.7824
+2026-01-27 01:32:41,427 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7765
+2026-01-27 01:32:43,136 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:32:45,387 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:32:48,814 - INFO - Turn 10 Val Acc: 0.7515, Test Acc: 0.7588
+2026-01-27 01:32:48,993 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:32:49,984 - INFO - After selection - Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:32:49,996 - INFO - Total token usage = 173770
+2026-01-27 01:32:52,110 - INFO - Turn 1 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:32:54,788 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7882
+2026-01-27 01:32:56,662 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:32:58,910 - INFO - Turn 4 Val Acc: 0.7633, Test Acc: 0.7647
+2026-01-27 01:33:00,764 - INFO - Turn 5 Val Acc: 0.7929, Test Acc: 0.7588
+2026-01-27 01:33:02,607 - INFO - Turn 6 Val Acc: 0.7633, Test Acc: 0.7882
+2026-01-27 01:33:04,513 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7824
+2026-01-27 01:33:06,755 - INFO - Turn 8 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:33:08,703 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7412
+2026-01-27 01:33:10,563 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7471
+2026-01-27 01:33:10,744 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7588
+2026-01-27 01:33:11,717 - INFO - After selection - Val Acc: 0.8047, Test Acc: 0.7353
+2026-01-27 01:33:11,729 - INFO - Total token usage = 218143
+2026-01-27 01:33:13,723 - INFO - Turn 1 Val Acc: 0.7870, Test Acc: 0.7765
+2026-01-27 01:33:15,914 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7529
+2026-01-27 01:33:17,620 - INFO - Turn 3 Val Acc: 0.7574, Test Acc: 0.7765
+2026-01-27 01:33:19,715 - INFO - Turn 4 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:33:22,521 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:33:24,624 - INFO - Turn 6 Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:33:26,666 - INFO - Turn 7 Val Acc: 0.7515, Test Acc: 0.7706
+2026-01-27 01:33:28,467 - INFO - Turn 8 Val Acc: 0.7751, Test Acc: 0.7647
+2026-01-27 01:33:30,459 - INFO - Turn 9 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:33:32,041 - INFO - Turn 10 Val Acc: 0.7574, Test Acc: 0.7529
+2026-01-27 01:33:32,206 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7765
+2026-01-27 01:33:33,125 - INFO - After selection - Val Acc: 0.7633, Test Acc: 0.7647
+2026-01-27 01:33:33,137 - INFO - Total token usage = 262630
+2026-01-27 01:33:35,236 - INFO - Turn 1 Val Acc: 0.7811, Test Acc: 0.7706
+2026-01-27 01:33:37,263 - INFO - Turn 2 Val Acc: 0.8047, Test Acc: 0.7647
+2026-01-27 01:33:39,105 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7765
+2026-01-27 01:33:42,105 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7647
+2026-01-27 01:33:44,068 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:33:45,989 - INFO - Turn 6 Val Acc: 0.7574, Test Acc: 0.7706
+2026-01-27 01:33:50,317 - INFO - Turn 7 Val Acc: 0.7751, Test Acc: 0.7647
+2026-01-27 01:33:52,305 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:33:54,325 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7824
+2026-01-27 01:33:56,897 - INFO - Turn 10 Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:33:57,061 - INFO - Best dialogue result - Val Acc: 0.8047, Test Acc: 0.7647
+2026-01-27 01:33:57,952 - INFO - After selection - Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:33:57,964 - INFO - Total token usage = 307176
+2026-01-27 01:34:00,294 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7353
+2026-01-27 01:34:02,640 - INFO - Turn 2 Val Acc: 0.7692, Test Acc: 0.7706
+2026-01-27 01:34:07,583 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:34:09,383 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7647
+2026-01-27 01:34:11,515 - INFO - Turn 5 Val Acc: 0.7633, Test Acc: 0.7471
+2026-01-27 01:34:13,760 - INFO - Turn 6 Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:34:15,741 - INFO - Turn 7 Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:34:17,467 - INFO - Turn 8 Val Acc: 0.7515, Test Acc: 0.7588
+2026-01-27 01:34:19,458 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7647
+2026-01-27 01:34:21,246 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:34:21,425 - INFO - Best dialogue result - Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:34:22,395 - INFO - After selection - Val Acc: 0.7870, Test Acc: 0.7706
+2026-01-27 01:34:22,407 - INFO - Total token usage = 351784
+2026-01-27 01:34:25,504 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7647
+2026-01-27 01:34:27,211 - INFO - Turn 3 Val Acc: 0.7870, Test Acc: 0.7529
+2026-01-27 01:34:28,988 - INFO - Turn 4 Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:34:31,147 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7588
+2026-01-27 01:34:33,052 - INFO - Turn 6 Val Acc: 0.7456, Test Acc: 0.7765
+2026-01-27 01:34:35,155 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:34:37,138 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7706
+2026-01-27 01:34:39,204 - INFO - Turn 9 Val Acc: 0.7456, Test Acc: 0.7529
+2026-01-27 01:34:41,078 - INFO - Turn 10 Val Acc: 0.7929, Test Acc: 0.7471
+2026-01-27 01:34:41,256 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7471
+2026-01-27 01:34:42,245 - INFO - After selection - Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:34:42,257 - INFO - Total token usage = 395852
+2026-01-27 01:34:42,426 - INFO - Total token usage = 395852
+
+======== Main_Results/OGR/vehicle_CoT_gpt-4o_3_3.log ========
+2026-01-27 01:35:13,670 - INFO - Turn 1 Val Acc: 0.7515, Test Acc: 0.7765
+2026-01-27 01:35:17,009 - INFO - Turn 2 Val Acc: 0.7515, Test Acc: 0.7706
+2026-01-27 01:35:18,926 - INFO - Turn 3 Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:35:20,843 - INFO - Turn 4 Val Acc: 0.7278, Test Acc: 0.7706
+2026-01-27 01:35:22,575 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7765
+2026-01-27 01:35:24,318 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7471
+2026-01-27 01:35:26,647 - INFO - Turn 7 Val Acc: 0.7219, Test Acc: 0.7588
+2026-01-27 01:35:28,496 - INFO - Turn 8 Val Acc: 0.7456, Test Acc: 0.7353
+2026-01-27 01:35:30,238 - INFO - Turn 9 Val Acc: 0.7870, Test Acc: 0.7529
+2026-01-27 01:35:31,793 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7765
+2026-01-27 01:35:31,949 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7647
+2026-01-27 01:35:32,472 - INFO - Total token usage = 26247
+2026-01-27 01:35:34,156 - INFO - Turn 1 Val Acc: 0.6923, Test Acc: 0.7647
+2026-01-27 01:35:35,666 - INFO - Turn 2 Val Acc: 0.7337, Test Acc: 0.7647
+2026-01-27 01:35:37,655 - INFO - Turn 3 Val Acc: 0.7396, Test Acc: 0.7824
+2026-01-27 01:35:40,330 - INFO - Turn 4 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:35:42,315 - INFO - Turn 5 Val Acc: 0.7101, Test Acc: 0.7529
+2026-01-27 01:35:44,187 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7941
+2026-01-27 01:35:45,932 - INFO - Turn 7 Val Acc: 0.7278, Test Acc: 0.7765
+2026-01-27 01:35:47,753 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7882
+2026-01-27 01:35:49,609 - INFO - Turn 9 Val Acc: 0.7456, Test Acc: 0.7647
+2026-01-27 01:35:51,419 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7647
+2026-01-27 01:35:51,582 - INFO - Best dialogue result - Val Acc: 0.7574, Test Acc: 0.7882
+2026-01-27 01:35:52,482 - INFO - After selection - Val Acc: 0.7396, Test Acc: 0.8000
+2026-01-27 01:35:52,488 - INFO - Total token usage = 59732
+2026-01-27 01:35:54,219 - INFO - Turn 1 Val Acc: 0.7219, Test Acc: 0.7765
+2026-01-27 01:35:56,195 - INFO - Turn 2 Val Acc: 0.7160, Test Acc: 0.7706
+2026-01-27 01:35:58,067 - INFO - Turn 3 Val Acc: 0.7456, Test Acc: 0.7647
+2026-01-27 01:35:59,818 - INFO - Turn 4 Val Acc: 0.7456, Test Acc: 0.7471
+2026-01-27 01:36:01,263 - INFO - Turn 5 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:36:03,029 - INFO - Turn 6 Val Acc: 0.7456, Test Acc: 0.7647
+2026-01-27 01:36:04,813 - INFO - Turn 7 Val Acc: 0.7337, Test Acc: 0.7882
+2026-01-27 01:36:06,731 - INFO - Turn 8 Val Acc: 0.7278, Test Acc: 0.7824
+2026-01-27 01:36:08,395 - INFO - Turn 9 Val Acc: 0.7396, Test Acc: 0.7706
+2026-01-27 01:36:10,379 - INFO - Turn 10 Val Acc: 0.7811, Test Acc: 0.7412
+2026-01-27 01:36:10,542 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7412
+2026-01-27 01:36:11,440 - INFO - After selection - Val Acc: 0.7515, Test Acc: 0.7882
+2026-01-27 01:36:11,447 - INFO - Total token usage = 93174
+2026-01-27 01:36:13,302 - INFO - Turn 1 Val Acc: 0.7160, Test Acc: 0.7588
+2026-01-27 01:36:15,493 - INFO - Turn 2 Val Acc: 0.7278, Test Acc: 0.7647
+2026-01-27 01:36:17,436 - INFO - Turn 3 Val Acc: 0.7278, Test Acc: 0.7647
+2026-01-27 01:36:19,938 - INFO - Turn 4 Val Acc: 0.7219, Test Acc: 0.7647
+2026-01-27 01:36:25,544 - INFO - Turn 5 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:36:27,148 - INFO - Turn 6 Val Acc: 0.7456, Test Acc: 0.7647
+2026-01-27 01:36:28,696 - INFO - Turn 7 Val Acc: 0.7456, Test Acc: 0.7471
+2026-01-27 01:36:30,368 - INFO - Turn 8 Val Acc: 0.7041, Test Acc: 0.7765
+2026-01-27 01:36:32,230 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7765
+2026-01-27 01:36:33,887 - INFO - Turn 10 Val Acc: 0.7337, Test Acc: 0.7588
+2026-01-27 01:36:34,048 - INFO - Best dialogue result - Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:36:34,958 - INFO - After selection - Val Acc: 0.7456, Test Acc: 0.7353
+2026-01-27 01:36:34,964 - INFO - Total token usage = 126851
+2026-01-27 01:36:36,714 - INFO - Turn 1 Val Acc: 0.7396, Test Acc: 0.7765
+2026-01-27 01:36:38,704 - INFO - Turn 2 Val Acc: 0.7219, Test Acc: 0.7882
+2026-01-27 01:36:40,461 - INFO - Turn 3 Val Acc: 0.7396, Test Acc: 0.7824
+2026-01-27 01:36:42,149 - INFO - Turn 4 Val Acc: 0.7396, Test Acc: 0.7706
+2026-01-27 01:36:43,762 - INFO - Turn 5 Val Acc: 0.7337, Test Acc: 0.7824
+2026-01-27 01:36:45,735 - INFO - Turn 6 Val Acc: 0.7101, Test Acc: 0.7353
+2026-01-27 01:36:47,295 - INFO - Turn 7 Val Acc: 0.7041, Test Acc: 0.7647
+2026-01-27 01:36:49,257 - INFO - Turn 8 Val Acc: 0.7337, Test Acc: 0.7824
+2026-01-27 01:36:51,733 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7941
+2026-01-27 01:36:53,548 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7765
+2026-01-27 01:36:53,708 - INFO - Best dialogue result - Val Acc: 0.7515, Test Acc: 0.7941
+2026-01-27 01:36:54,610 - INFO - After selection - Val Acc: 0.7456, Test Acc: 0.8059
+2026-01-27 01:36:54,617 - INFO - Total token usage = 160282
+2026-01-27 01:36:56,417 - INFO - Turn 1 Val Acc: 0.7337, Test Acc: 0.7647
+2026-01-27 01:36:58,267 - INFO - Turn 2 Val Acc: 0.7396, Test Acc: 0.7647
+2026-01-27 01:37:00,188 - INFO - Turn 3 Val Acc: 0.7278, Test Acc: 0.7588
+2026-01-27 01:37:02,107 - INFO - Turn 4 Val Acc: 0.7337, Test Acc: 0.7765
+2026-01-27 01:37:03,914 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7882
+2026-01-27 01:37:05,818 - INFO - Turn 6 Val Acc: 0.7219, Test Acc: 0.7529
+2026-01-27 01:37:07,628 - INFO - Turn 7 Val Acc: 0.7160, Test Acc: 0.7588
+2026-01-27 01:37:09,464 - INFO - Turn 8 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:37:11,616 - INFO - Turn 9 Val Acc: 0.7219, Test Acc: 0.7765
+2026-01-27 01:37:13,438 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7647
+2026-01-27 01:37:13,596 - INFO - Best dialogue result - Val Acc: 0.7692, Test Acc: 0.7647
+2026-01-27 01:37:14,188 - INFO - Total token usage = 193740
+2026-01-27 01:37:16,188 - INFO - Turn 1 Val Acc: 0.7278, Test Acc: 0.7765
+2026-01-27 01:37:17,998 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7941
+2026-01-27 01:37:20,979 - INFO - Turn 3 Val Acc: 0.7160, Test Acc: 0.7471
+2026-01-27 01:37:23,221 - INFO - Turn 4 Val Acc: 0.7278, Test Acc: 0.7941
+2026-01-27 01:37:24,830 - INFO - Turn 5 Val Acc: 0.6982, Test Acc: 0.7529
+2026-01-27 01:37:26,445 - INFO - Turn 6 Val Acc: 0.7337, Test Acc: 0.7765
+2026-01-27 01:37:28,218 - INFO - Turn 7 Val Acc: 0.7219, Test Acc: 0.7529
+2026-01-27 01:37:30,287 - INFO - Turn 8 Val Acc: 0.7456, Test Acc: 0.7882
+2026-01-27 01:37:31,937 - INFO - Turn 9 Val Acc: 0.7278, Test Acc: 0.7588
+2026-01-27 01:37:33,599 - INFO - Turn 10 Val Acc: 0.7160, Test Acc: 0.7471
+2026-01-27 01:37:33,759 - INFO - Best dialogue result - Val Acc: 0.7633, Test Acc: 0.7941
+2026-01-27 01:37:34,665 - INFO - After selection - Val Acc: 0.7633, Test Acc: 0.7824
+2026-01-27 01:37:34,671 - INFO - Total token usage = 227286
+2026-01-27 01:37:36,667 - INFO - Turn 1 Val Acc: 0.7337, Test Acc: 0.7824
+2026-01-27 01:37:38,451 - INFO - Turn 2 Val Acc: 0.7337, Test Acc: 0.7706
+2026-01-27 01:37:40,796 - INFO - Turn 3 Val Acc: 0.7219, Test Acc: 0.8000
+2026-01-27 01:37:42,887 - INFO - Turn 4 Val Acc: 0.7337, Test Acc: 0.7882
+2026-01-27 01:37:44,844 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7824
+2026-01-27 01:37:46,708 - INFO - Turn 6 Val Acc: 0.7456, Test Acc: 0.7765
+2026-01-27 01:37:48,672 - INFO - Turn 7 Val Acc: 0.7396, Test Acc: 0.7941
+2026-01-27 01:37:50,932 - INFO - Turn 8 Val Acc: 0.7278, Test Acc: 0.7941
+2026-01-27 01:37:52,709 - INFO - Turn 9 Val Acc: 0.7219, Test Acc: 0.7765
+2026-01-27 01:37:54,467 - INFO - Turn 10 Val Acc: 0.7219, Test Acc: 0.7647
+2026-01-27 01:37:54,629 - INFO - Best dialogue result - Val Acc: 0.7456, Test Acc: 0.7765
+2026-01-27 01:37:55,528 - INFO - After selection - Val Acc: 0.7456, Test Acc: 0.7647
+2026-01-27 01:37:55,534 - INFO - Total token usage = 260787
+2026-01-27 01:37:57,303 - INFO - Turn 1 Val Acc: 0.7456, Test Acc: 0.7706
+2026-01-27 01:37:59,075 - INFO - Turn 2 Val Acc: 0.7160, Test Acc: 0.8176
+2026-01-27 01:38:00,756 - INFO - Turn 3 Val Acc: 0.7574, Test Acc: 0.7706
+2026-01-27 01:38:02,679 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7706
+2026-01-27 01:38:05,931 - INFO - Turn 5 Val Acc: 0.6923, Test Acc: 0.7588
+2026-01-27 01:38:07,785 - INFO - Turn 6 Val Acc: 0.7456, Test Acc: 0.7824
+2026-01-27 01:38:09,614 - INFO - Turn 7 Val Acc: 0.7396, Test Acc: 0.8000
+2026-01-27 01:38:11,591 - INFO - Turn 8 Val Acc: 0.7515, Test Acc: 0.7824
+2026-01-27 01:38:14,491 - INFO - Turn 9 Val Acc: 0.7041, Test Acc: 0.7882
+2026-01-27 01:38:16,174 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7529
+2026-01-27 01:38:16,336 - INFO - Best dialogue result - Val Acc: 0.7574, Test Acc: 0.7706
+2026-01-27 01:38:17,258 - INFO - After selection - Val Acc: 0.7278, Test Acc: 0.7765
+2026-01-27 01:38:17,264 - INFO - Total token usage = 294420
+2026-01-27 01:38:19,019 - INFO - Turn 1 Val Acc: 0.7396, Test Acc: 0.7765
+2026-01-27 01:38:21,143 - INFO - Turn 2 Val Acc: 0.7219, Test Acc: 0.7529
+2026-01-27 01:38:22,832 - INFO - Turn 3 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:38:24,544 - INFO - Turn 4 Val Acc: 0.7219, Test Acc: 0.7647
+2026-01-27 01:38:26,453 - INFO - Turn 5 Val Acc: 0.7515, Test Acc: 0.7647
+2026-01-27 01:38:28,277 - INFO - Turn 6 Val Acc: 0.7219, Test Acc: 0.7941
+2026-01-27 01:38:29,940 - INFO - Turn 7 Val Acc: 0.7278, Test Acc: 0.7588
+2026-01-27 01:38:31,749 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7588
+2026-01-27 01:38:33,470 - INFO - Turn 9 Val Acc: 0.7219, Test Acc: 0.7882
+2026-01-27 01:38:35,325 - INFO - Turn 10 Val Acc: 0.7278, Test Acc: 0.7941
+2026-01-27 01:38:35,484 - INFO - Best dialogue result - Val Acc: 0.7574, Test Acc: 0.7588
+2026-01-27 01:38:36,398 - INFO - After selection - Val Acc: 0.7456, Test Acc: 0.7765
+2026-01-27 01:38:36,404 - INFO - Total token usage = 327953
+2026-01-27 01:38:36,565 - INFO - Total token usage = 327953
+
+======== Main_Results/OGR/vehicle_CoT_gpt-4o_3_4.log ========
+2026-01-27 01:40:03,301 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7353
+2026-01-27 01:40:04,996 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:40:06,812 - INFO - Turn 3 Val Acc: 0.7811, Test Acc: 0.7235
+2026-01-27 01:40:08,894 - INFO - Turn 4 Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:40:10,949 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:40:12,900 - INFO - Turn 6 Val Acc: 0.7751, Test Acc: 0.7353
+2026-01-27 01:40:14,961 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7353
+2026-01-27 01:40:16,457 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7588
+2026-01-27 01:40:17,900 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7353
+2026-01-27 01:40:19,506 - INFO - Turn 10 Val Acc: 0.7811, Test Acc: 0.7471
+2026-01-27 01:40:19,666 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:40:20,517 - INFO - After selection - Val Acc: 0.7574, Test Acc: 0.7294
+2026-01-27 01:40:20,529 - INFO - Total token usage = 26262
+2026-01-27 01:40:22,977 - INFO - Turn 1 Val Acc: 0.7574, Test Acc: 0.7000
+2026-01-27 01:40:24,629 - INFO - Turn 2 Val Acc: 0.7811, Test Acc: 0.7353
+2026-01-27 01:40:26,530 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:40:28,258 - INFO - Turn 4 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:40:30,068 - INFO - Turn 5 Val Acc: 0.7456, Test Acc: 0.7412
+2026-01-27 01:40:31,836 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7412
+2026-01-27 01:40:33,565 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7294
+2026-01-27 01:40:35,089 - INFO - Turn 8 Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:40:36,689 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7353
+2026-01-27 01:40:38,564 - INFO - Turn 10 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:40:38,729 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7353
+2026-01-27 01:40:39,661 - INFO - After selection - Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:40:39,668 - INFO - Total token usage = 59872
+2026-01-27 01:40:41,566 - INFO - Turn 1 Val Acc: 0.7515, Test Acc: 0.7353
+2026-01-27 01:40:45,376 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:40:47,248 - INFO - Turn 3 Val Acc: 0.7633, Test Acc: 0.7294
+2026-01-27 01:40:48,909 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:40:50,712 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7294
+2026-01-27 01:40:52,648 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7706
+2026-01-27 01:40:54,661 - INFO - Turn 7 Val Acc: 0.7515, Test Acc: 0.7412
+2026-01-27 01:40:56,477 - INFO - Turn 8 Val Acc: 0.7811, Test Acc: 0.7353
+2026-01-27 01:40:58,990 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7294
+2026-01-27 01:41:00,874 - INFO - Turn 10 Val Acc: 0.7751, Test Acc: 0.7235
+2026-01-27 01:41:01,038 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7294
+2026-01-27 01:41:02,004 - INFO - After selection - Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:41:02,011 - INFO - Total token usage = 93637
+2026-01-27 01:41:03,866 - INFO - Turn 1 Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:41:05,569 - INFO - Turn 2 Val Acc: 0.7988, Test Acc: 0.7353
+2026-01-27 01:41:07,557 - INFO - Turn 3 Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:41:09,323 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7588
+2026-01-27 01:41:11,275 - INFO - Turn 5 Val Acc: 0.7870, Test Acc: 0.7235
+2026-01-27 01:41:13,312 - INFO - Turn 6 Val Acc: 0.7811, Test Acc: 0.7412
+2026-01-27 01:41:15,018 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:41:16,926 - INFO - Turn 8 Val Acc: 0.7811, Test Acc: 0.7176
+2026-01-27 01:41:18,577 - INFO - Turn 9 Val Acc: 0.7811, Test Acc: 0.7118
+2026-01-27 01:41:20,824 - INFO - Turn 10 Val Acc: 0.7515, Test Acc: 0.7294
+2026-01-27 01:41:20,988 - INFO - Best dialogue result - Val Acc: 0.7988, Test Acc: 0.7353
+2026-01-27 01:41:21,961 - INFO - After selection - Val Acc: 0.7692, Test Acc: 0.7647
+2026-01-27 01:41:21,976 - INFO - Total token usage = 127333
+2026-01-27 01:41:24,243 - INFO - Turn 1 Val Acc: 0.7751, Test Acc: 0.7471
+2026-01-27 01:41:26,019 - INFO - Turn 2 Val Acc: 0.7870, Test Acc: 0.7294
+2026-01-27 01:41:27,643 - INFO - Turn 3 Val Acc: 0.7811, Test Acc: 0.7412
+2026-01-27 01:41:29,673 - INFO - Turn 4 Val Acc: 0.7633, Test Acc: 0.7353
+2026-01-27 01:41:31,682 - INFO - Turn 5 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:41:33,502 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7353
+2026-01-27 01:41:36,880 - INFO - Turn 7 Val Acc: 0.7751, Test Acc: 0.7294
+2026-01-27 01:41:38,757 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:41:40,474 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7471
+2026-01-27 01:41:42,337 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:41:42,521 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7294
+2026-01-27 01:41:43,564 - INFO - After selection - Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:41:43,573 - INFO - Total token usage = 167080
+2026-01-27 01:41:46,223 - INFO - Turn 1 Val Acc: 0.7396, Test Acc: 0.7176
+2026-01-27 01:41:48,135 - INFO - Turn 2 Val Acc: 0.7751, Test Acc: 0.7294
+2026-01-27 01:41:50,241 - INFO - Turn 3 Val Acc: 0.7751, Test Acc: 0.7176
+2026-01-27 01:41:53,014 - INFO - Turn 4 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:41:55,140 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7294
+2026-01-27 01:41:57,814 - INFO - Turn 6 Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:41:59,665 - INFO - Turn 7 Val Acc: 0.7811, Test Acc: 0.6882
+2026-01-27 01:42:01,639 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7176
+2026-01-27 01:42:03,362 - INFO - Turn 9 Val Acc: 0.7811, Test Acc: 0.7353
+2026-01-27 01:42:05,626 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7235
+2026-01-27 01:42:05,808 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:42:06,853 - INFO - After selection - Val Acc: 0.7751, Test Acc: 0.7059
+2026-01-27 01:42:06,862 - INFO - Total token usage = 206928
+2026-01-27 01:42:09,150 - INFO - Turn 1 Val Acc: 0.7692, Test Acc: 0.7176
+2026-01-27 01:42:11,474 - INFO - Turn 2 Val Acc: 0.7751, Test Acc: 0.7353
+2026-01-27 01:42:13,369 - INFO - Turn 3 Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:42:15,225 - INFO - Turn 4 Val Acc: 0.7929, Test Acc: 0.7529
+2026-01-27 01:42:17,202 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7176
+2026-01-27 01:42:19,054 - INFO - Turn 6 Val Acc: 0.7751, Test Acc: 0.7294
+2026-01-27 01:42:20,567 - INFO - Turn 7 Val Acc: 0.7751, Test Acc: 0.7294
+2026-01-27 01:42:22,164 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7118
+2026-01-27 01:42:24,042 - INFO - Turn 9 Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:42:26,300 - INFO - Turn 10 Val Acc: 0.7456, Test Acc: 0.7353
+2026-01-27 01:42:26,481 - INFO - Best dialogue result - Val Acc: 0.7929, Test Acc: 0.7529
+2026-01-27 01:42:27,520 - INFO - After selection - Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:42:27,528 - INFO - Total token usage = 246698
+2026-01-27 01:42:29,499 - INFO - Turn 1 Val Acc: 0.7811, Test Acc: 0.7118
+2026-01-27 01:42:31,614 - INFO - Turn 2 Val Acc: 0.7751, Test Acc: 0.7471
+2026-01-27 01:42:33,418 - INFO - Turn 3 Val Acc: 0.7751, Test Acc: 0.7235
+2026-01-27 01:42:35,057 - INFO - Turn 4 Val Acc: 0.7811, Test Acc: 0.7412
+2026-01-27 01:42:36,880 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7176
+2026-01-27 01:42:38,615 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:42:40,608 - INFO - Turn 7 Val Acc: 0.7751, Test Acc: 0.7294
+2026-01-27 01:42:42,085 - INFO - Turn 8 Val Acc: 0.8047, Test Acc: 0.7176
+2026-01-27 01:42:43,943 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7176
+2026-01-27 01:42:45,471 - INFO - Turn 10 Val Acc: 0.7929, Test Acc: 0.7706
+2026-01-27 01:42:45,650 - INFO - Best dialogue result - Val Acc: 0.8047, Test Acc: 0.7176
+2026-01-27 01:42:46,349 - INFO - Total token usage = 286378
+2026-01-27 01:42:49,024 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7471
+2026-01-27 01:42:50,725 - INFO - Turn 2 Val Acc: 0.7515, Test Acc: 0.7647
+2026-01-27 01:42:53,082 - INFO - Turn 3 Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:42:55,105 - INFO - Turn 4 Val Acc: 0.7811, Test Acc: 0.7353
+2026-01-27 01:42:57,030 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7412
+2026-01-27 01:42:59,255 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:43:02,537 - INFO - Turn 7 Val Acc: 0.7870, Test Acc: 0.7059
+2026-01-27 01:43:04,512 - INFO - Turn 8 Val Acc: 0.7870, Test Acc: 0.7176
+2026-01-27 01:43:06,579 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7353
+2026-01-27 01:43:08,406 - INFO - Turn 10 Val Acc: 0.7870, Test Acc: 0.7118
+2026-01-27 01:43:08,587 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7588
+2026-01-27 01:43:09,710 - INFO - After selection - Val Acc: 0.7692, Test Acc: 0.7706
+2026-01-27 01:43:09,721 - INFO - Total token usage = 329950
+2026-01-27 01:43:11,680 - INFO - Turn 1 Val Acc: 0.7456, Test Acc: 0.7059
+2026-01-27 01:43:13,504 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7235
+2026-01-27 01:43:16,938 - INFO - Turn 3 Val Acc: 0.7515, Test Acc: 0.7412
+2026-01-27 01:43:18,481 - INFO - Turn 4 Val Acc: 0.7811, Test Acc: 0.7235
+2026-01-27 01:43:20,375 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7176
+2026-01-27 01:43:22,143 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7353
+2026-01-27 01:43:23,835 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7294
+2026-01-27 01:43:25,612 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:43:27,588 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7235
+2026-01-27 01:43:29,443 - INFO - Turn 10 Val Acc: 0.7751, Test Acc: 0.7235
+2026-01-27 01:43:29,624 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7235
+2026-01-27 01:43:30,746 - INFO - After selection - Val Acc: 0.7811, Test Acc: 0.7294
+2026-01-27 01:43:30,756 - INFO - Total token usage = 373592
+2026-01-27 01:43:30,937 - INFO - Total token usage = 373592
+
+======== Main_Results/OGR/vehicle_CoT_gpt-4o_3_5.log ========
+2026-01-27 01:45:00,167 - INFO - Turn 1 Val Acc: 0.7337, Test Acc: 0.7000
+2026-01-27 01:45:02,743 - INFO - Turn 2 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:45:04,478 - INFO - Turn 3 Val Acc: 0.7337, Test Acc: 0.7118
+2026-01-27 01:45:06,535 - INFO - Turn 4 Val Acc: 0.7160, Test Acc: 0.7353
+2026-01-27 01:45:08,558 - INFO - Turn 5 Val Acc: 0.7633, Test Acc: 0.7000
+2026-01-27 01:45:10,415 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7235
+2026-01-27 01:45:15,753 - INFO - Turn 7 Val Acc: 0.7456, Test Acc: 0.7235
+2026-01-27 01:45:17,387 - INFO - Turn 8 Val Acc: 0.7219, Test Acc: 0.6941
+2026-01-27 01:45:19,250 - INFO - Turn 9 Val Acc: 0.7811, Test Acc: 0.7706
+2026-01-27 01:45:21,062 - INFO - Turn 10 Val Acc: 0.7456, Test Acc: 0.7176
+2026-01-27 01:45:21,219 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7706
+2026-01-27 01:45:21,745 - INFO - Total token usage = 26553
+2026-01-27 01:45:23,828 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7765
+2026-01-27 01:45:25,909 - INFO - Turn 2 Val Acc: 0.7396, Test Acc: 0.7412
+2026-01-27 01:45:27,886 - INFO - Turn 3 Val Acc: 0.7870, Test Acc: 0.7412
+2026-01-27 01:45:29,889 - INFO - Turn 4 Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:45:31,909 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:45:33,849 - INFO - Turn 6 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:45:35,721 - INFO - Turn 7 Val Acc: 0.7160, Test Acc: 0.7294
+2026-01-27 01:45:37,716 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:45:41,966 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7647
+2026-01-27 01:45:43,826 - INFO - Turn 10 Val Acc: 0.7574, Test Acc: 0.7706
+2026-01-27 01:45:43,987 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7412
+2026-01-27 01:45:44,589 - INFO - Total token usage = 60364
+2026-01-27 01:45:46,320 - INFO - Turn 1 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:45:48,300 - INFO - Turn 2 Val Acc: 0.7515, Test Acc: 0.7412
+2026-01-27 01:45:50,153 - INFO - Turn 3 Val Acc: 0.7337, Test Acc: 0.7647
+2026-01-27 01:45:52,041 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7471
+2026-01-27 01:45:53,873 - INFO - Turn 5 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:45:55,850 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7706
+2026-01-27 01:45:57,995 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7471
+2026-01-27 01:45:59,971 - INFO - Turn 8 Val Acc: 0.7633, Test Acc: 0.7647
+2026-01-27 01:46:01,892 - INFO - Turn 9 Val Acc: 0.7456, Test Acc: 0.7471
+2026-01-27 01:46:03,776 - INFO - Turn 10 Val Acc: 0.7515, Test Acc: 0.7765
+2026-01-27 01:46:03,956 - INFO - Best dialogue result - Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:46:04,931 - INFO - After selection - Val Acc: 0.7633, Test Acc: 0.7118
+2026-01-27 01:46:04,940 - INFO - Total token usage = 99711
+2026-01-27 01:46:07,377 - INFO - Turn 1 Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:46:09,287 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:46:11,119 - INFO - Turn 3 Val Acc: 0.7396, Test Acc: 0.7353
+2026-01-27 01:46:13,289 - INFO - Turn 4 Val Acc: 0.7278, Test Acc: 0.7471
+2026-01-27 01:46:15,013 - INFO - Turn 5 Val Acc: 0.7456, Test Acc: 0.7412
+2026-01-27 01:46:16,810 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7235
+2026-01-27 01:46:18,951 - INFO - Turn 7 Val Acc: 0.7219, Test Acc: 0.7412
+2026-01-27 01:46:20,603 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:46:22,452 - INFO - Turn 9 Val Acc: 0.7870, Test Acc: 0.7353
+2026-01-27 01:46:24,414 - INFO - Turn 10 Val Acc: 0.7396, Test Acc: 0.7588
+2026-01-27 01:46:24,596 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7353
+2026-01-27 01:46:25,617 - INFO - After selection - Val Acc: 0.7633, Test Acc: 0.7294
+2026-01-27 01:46:25,626 - INFO - Total token usage = 139052
+2026-01-27 01:46:27,741 - INFO - Turn 1 Val Acc: 0.7219, Test Acc: 0.7647
+2026-01-27 01:46:29,623 - INFO - Turn 2 Val Acc: 0.7278, Test Acc: 0.7765
+2026-01-27 01:46:31,847 - INFO - Turn 3 Val Acc: 0.7751, Test Acc: 0.7412
+2026-01-27 01:46:34,093 - INFO - Turn 4 Val Acc: 0.7751, Test Acc: 0.7647
+2026-01-27 01:46:35,866 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7294
+2026-01-27 01:46:37,586 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7235
+2026-01-27 01:46:39,569 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7235
+2026-01-27 01:46:41,110 - INFO - Turn 8 Val Acc: 0.7219, Test Acc: 0.7412
+2026-01-27 01:46:43,451 - INFO - Turn 9 Val Acc: 0.7396, Test Acc: 0.7294
+2026-01-27 01:46:45,377 - INFO - Turn 10 Val Acc: 0.7278, Test Acc: 0.7765
+2026-01-27 01:46:45,553 - INFO - Best dialogue result - Val Acc: 0.7751, Test Acc: 0.7412
+2026-01-27 01:46:46,522 - INFO - After selection - Val Acc: 0.7929, Test Acc: 0.7353
+2026-01-27 01:46:46,538 - INFO - Total token usage = 178397
+2026-01-27 01:46:48,472 - INFO - Turn 1 Val Acc: 0.7929, Test Acc: 0.7588
+2026-01-27 01:46:50,679 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:46:54,875 - INFO - Turn 3 Val Acc: 0.7811, Test Acc: 0.7294
+2026-01-27 01:46:56,860 - INFO - Turn 4 Val Acc: 0.7751, Test Acc: 0.7412
+2026-01-27 01:46:58,872 - INFO - Turn 5 Val Acc: 0.7692, Test Acc: 0.7176
+2026-01-27 01:47:00,940 - INFO - Turn 6 Val Acc: 0.7574, Test Acc: 0.7235
+2026-01-27 01:47:02,962 - INFO - Turn 7 Val Acc: 0.7988, Test Acc: 0.7529
+2026-01-27 01:47:05,156 - INFO - Turn 8 Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:47:08,778 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7647
+2026-01-27 01:47:10,496 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7176
+2026-01-27 01:47:10,672 - INFO - Best dialogue result - Val Acc: 0.7988, Test Acc: 0.7529
+2026-01-27 01:47:11,573 - INFO - After selection - Val Acc: 0.7633, Test Acc: 0.7412
+2026-01-27 01:47:11,594 - INFO - Total token usage = 215809
+2026-01-27 01:47:13,946 - INFO - Turn 1 Val Acc: 0.7751, Test Acc: 0.7412
+2026-01-27 01:47:16,478 - INFO - Turn 2 Val Acc: 0.8047, Test Acc: 0.7294
+2026-01-27 01:47:20,408 - INFO - Turn 3 Val Acc: 0.8284, Test Acc: 0.7588
+2026-01-27 01:47:23,819 - INFO - Turn 4 Val Acc: 0.7870, Test Acc: 0.7412
+2026-01-27 01:47:25,501 - INFO - Turn 5 Val Acc: 0.7811, Test Acc: 0.7294
+2026-01-27 01:47:27,322 - INFO - Turn 6 Val Acc: 0.7870, Test Acc: 0.7412
+2026-01-27 01:47:29,431 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7294
+2026-01-27 01:47:32,287 - INFO - Turn 8 Val Acc: 0.7751, Test Acc: 0.7706
+2026-01-27 01:47:34,233 - INFO - Turn 9 Val Acc: 0.7870, Test Acc: 0.7471
+2026-01-27 01:47:36,308 - INFO - Turn 10 Val Acc: 0.7929, Test Acc: 0.7000
+2026-01-27 01:47:36,486 - INFO - Best dialogue result - Val Acc: 0.8284, Test Acc: 0.7588
+2026-01-27 01:47:37,486 - INFO - After selection - Val Acc: 0.7988, Test Acc: 0.7765
+2026-01-27 01:47:37,511 - INFO - Total token usage = 259660
+2026-01-27 01:47:39,663 - INFO - Turn 1 Val Acc: 0.8107, Test Acc: 0.7647
+2026-01-27 01:47:41,431 - INFO - Turn 2 Val Acc: 0.8225, Test Acc: 0.7706
+2026-01-27 01:47:43,637 - INFO - Turn 3 Val Acc: 0.8107, Test Acc: 0.7706
+2026-01-27 01:47:45,619 - INFO - Turn 4 Val Acc: 0.8284, Test Acc: 0.7588
+2026-01-27 01:47:48,004 - INFO - Turn 5 Val Acc: 0.8047, Test Acc: 0.7765
+2026-01-27 01:47:50,395 - INFO - Turn 6 Val Acc: 0.8225, Test Acc: 0.7706
+2026-01-27 01:47:52,941 - INFO - Turn 7 Val Acc: 0.7988, Test Acc: 0.7647
+2026-01-27 01:47:55,549 - INFO - Turn 8 Val Acc: 0.8107, Test Acc: 0.7706
+2026-01-27 01:47:57,701 - INFO - Turn 9 Val Acc: 0.8284, Test Acc: 0.7882
+2026-01-27 01:47:59,817 - INFO - Turn 10 Val Acc: 0.8107, Test Acc: 0.7588
+2026-01-27 01:47:59,994 - INFO - Best dialogue result - Val Acc: 0.8284, Test Acc: 0.7588
+2026-01-27 01:48:01,099 - INFO - After selection - Val Acc: 0.7929, Test Acc: 0.7765
+2026-01-27 01:48:01,113 - INFO - Total token usage = 310193
+2026-01-27 01:48:03,467 - INFO - Turn 1 Val Acc: 0.7870, Test Acc: 0.7706
+2026-01-27 01:48:05,959 - INFO - Turn 2 Val Acc: 0.8107, Test Acc: 0.7647
+2026-01-27 01:48:08,340 - INFO - Turn 3 Val Acc: 0.7988, Test Acc: 0.7706
+2026-01-27 01:48:11,433 - INFO - Turn 4 Val Acc: 0.7988, Test Acc: 0.7765
+2026-01-27 01:48:13,558 - INFO - Turn 5 Val Acc: 0.8284, Test Acc: 0.7824
+2026-01-27 01:48:15,688 - INFO - Turn 6 Val Acc: 0.7988, Test Acc: 0.7412
+2026-01-27 01:48:17,765 - INFO - Turn 7 Val Acc: 0.7988, Test Acc: 0.7471
+2026-01-27 01:48:19,784 - INFO - Turn 8 Val Acc: 0.8107, Test Acc: 0.7765
+2026-01-27 01:48:21,863 - INFO - Turn 9 Val Acc: 0.8047, Test Acc: 0.7529
+2026-01-27 01:48:23,915 - INFO - Turn 10 Val Acc: 0.8225, Test Acc: 0.7706
+2026-01-27 01:48:24,096 - INFO - Best dialogue result - Val Acc: 0.8284, Test Acc: 0.7824
+2026-01-27 01:48:25,211 - INFO - After selection - Val Acc: 0.8107, Test Acc: 0.7824
+2026-01-27 01:48:25,225 - INFO - Total token usage = 360568
+2026-01-27 01:48:27,483 - INFO - Turn 1 Val Acc: 0.8225, Test Acc: 0.7647
+2026-01-27 01:48:31,447 - INFO - Turn 2 Val Acc: 0.8225, Test Acc: 0.7588
+2026-01-27 01:48:33,735 - INFO - Turn 3 Val Acc: 0.7988, Test Acc: 0.7765
+2026-01-27 01:48:36,255 - INFO - Turn 4 Val Acc: 0.8166, Test Acc: 0.7588
+2026-01-27 01:48:38,645 - INFO - Turn 5 Val Acc: 0.8343, Test Acc: 0.7824
+2026-01-27 01:48:40,357 - INFO - Turn 6 Val Acc: 0.7988, Test Acc: 0.7882
+2026-01-27 01:48:42,575 - INFO - Turn 7 Val Acc: 0.8284, Test Acc: 0.7647
+2026-01-27 01:48:44,874 - INFO - Turn 8 Val Acc: 0.8166, Test Acc: 0.7824
+2026-01-27 01:48:47,066 - INFO - Turn 9 Val Acc: 0.8107, Test Acc: 0.7529
+2026-01-27 01:48:48,923 - INFO - Turn 10 Val Acc: 0.8047, Test Acc: 0.7765
+2026-01-27 01:48:49,104 - INFO - Best dialogue result - Val Acc: 0.8343, Test Acc: 0.7824
+2026-01-27 01:48:50,184 - INFO - After selection - Val Acc: 0.8107, Test Acc: 0.7941
+2026-01-27 01:48:50,213 - INFO - Total token usage = 410832
+2026-01-27 01:48:50,404 - INFO - Total token usage = 410832
+
+======== Main_Results/OGR/vehicle_CoT_gpt-4o_3_6.log ========
+2026-01-27 01:50:18,568 - INFO - Turn 1 Val Acc: 0.7041, Test Acc: 0.6765
+2026-01-27 01:50:20,138 - INFO - Turn 2 Val Acc: 0.7101, Test Acc: 0.7059
+2026-01-27 01:50:22,331 - INFO - Turn 3 Val Acc: 0.7160, Test Acc: 0.6706
+2026-01-27 01:50:24,260 - INFO - Turn 4 Val Acc: 0.7219, Test Acc: 0.7059
+2026-01-27 01:50:26,219 - INFO - Turn 5 Val Acc: 0.6982, Test Acc: 0.7059
+2026-01-27 01:50:28,156 - INFO - Turn 6 Val Acc: 0.7101, Test Acc: 0.6706
+2026-01-27 01:50:29,879 - INFO - Turn 7 Val Acc: 0.7278, Test Acc: 0.6882
+2026-01-27 01:50:31,697 - INFO - Turn 8 Val Acc: 0.7337, Test Acc: 0.7059
+2026-01-27 01:50:33,575 - INFO - Turn 9 Val Acc: 0.7337, Test Acc: 0.6882
+2026-01-27 01:50:35,149 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7176
+2026-01-27 01:50:35,302 - INFO - Best dialogue result - Val Acc: 0.7633, Test Acc: 0.7176
+2026-01-27 01:50:36,101 - INFO - After selection - Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:50:36,109 - INFO - Total token usage = 26334
+2026-01-27 01:50:38,213 - INFO - Turn 1 Val Acc: 0.7101, Test Acc: 0.7059
+2026-01-27 01:50:39,799 - INFO - Turn 2 Val Acc: 0.7219, Test Acc: 0.7294
+2026-01-27 01:50:41,582 - INFO - Turn 3 Val Acc: 0.6982, Test Acc: 0.7235
+2026-01-27 01:50:43,551 - INFO - Turn 4 Val Acc: 0.7101, Test Acc: 0.7176
+2026-01-27 01:50:46,098 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7235
+2026-01-27 01:50:48,296 - INFO - Turn 6 Val Acc: 0.7041, Test Acc: 0.6765
+2026-01-27 01:50:50,586 - INFO - Turn 7 Val Acc: 0.7574, Test Acc: 0.7235
+2026-01-27 01:50:52,031 - INFO - Turn 8 Val Acc: 0.7396, Test Acc: 0.7000
+2026-01-27 01:50:53,659 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7294
+2026-01-27 01:50:55,237 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7118
+2026-01-27 01:50:55,392 - INFO - Best dialogue result - Val Acc: 0.7633, Test Acc: 0.7118
+2026-01-27 01:50:55,970 - INFO - Total token usage = 57595
+2026-01-27 01:50:58,051 - INFO - Turn 1 Val Acc: 0.7515, Test Acc: 0.7294
+2026-01-27 01:50:59,419 - INFO - Turn 2 Val Acc: 0.7337, Test Acc: 0.7471
+2026-01-27 01:51:03,093 - INFO - Turn 3 Val Acc: 0.7574, Test Acc: 0.6941
+2026-01-27 01:51:04,909 - INFO - Turn 4 Val Acc: 0.7396, Test Acc: 0.7235
+2026-01-27 01:51:06,762 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7176
+2026-01-27 01:51:08,669 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7294
+2026-01-27 01:51:10,584 - INFO - Turn 7 Val Acc: 0.7337, Test Acc: 0.7529
+2026-01-27 01:51:12,684 - INFO - Turn 8 Val Acc: 0.7160, Test Acc: 0.7176
+2026-01-27 01:51:14,653 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7471
+2026-01-27 01:51:18,482 - INFO - Turn 10 Val Acc: 0.7219, Test Acc: 0.7412
+2026-01-27 01:51:18,642 - INFO - Best dialogue result - Val Acc: 0.7633, Test Acc: 0.7471
+2026-01-27 01:51:19,520 - INFO - After selection - Val Acc: 0.7337, Test Acc: 0.7294
+2026-01-27 01:51:19,525 - INFO - Total token usage = 88864
+2026-01-27 01:51:21,890 - INFO - Turn 1 Val Acc: 0.7456, Test Acc: 0.7412
+2026-01-27 01:51:23,895 - INFO - Turn 2 Val Acc: 0.7574, Test Acc: 0.7235
+2026-01-27 01:51:25,888 - INFO - Turn 3 Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:51:27,712 - INFO - Turn 4 Val Acc: 0.7337, Test Acc: 0.7412
+2026-01-27 01:51:30,023 - INFO - Turn 5 Val Acc: 0.7396, Test Acc: 0.7176
+2026-01-27 01:51:31,788 - INFO - Turn 6 Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:51:33,633 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.6882
+2026-01-27 01:51:35,656 - INFO - Turn 8 Val Acc: 0.7219, Test Acc: 0.7353
+2026-01-27 01:51:37,599 - INFO - Turn 9 Val Acc: 0.7337, Test Acc: 0.7059
+2026-01-27 01:51:39,550 - INFO - Turn 10 Val Acc: 0.7337, Test Acc: 0.7471
+2026-01-27 01:51:39,706 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7647
+2026-01-27 01:51:40,590 - INFO - After selection - Val Acc: 0.7278, Test Acc: 0.7353
+2026-01-27 01:51:40,601 - INFO - Total token usage = 120178
+2026-01-27 01:51:43,055 - INFO - Turn 1 Val Acc: 0.7396, Test Acc: 0.7588
+2026-01-27 01:51:45,064 - INFO - Turn 2 Val Acc: 0.7692, Test Acc: 0.7412
+2026-01-27 01:51:47,019 - INFO - Turn 3 Val Acc: 0.7515, Test Acc: 0.7235
+2026-01-27 01:51:49,178 - INFO - Turn 4 Val Acc: 0.7337, Test Acc: 0.7412
+2026-01-27 01:51:51,311 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7353
+2026-01-27 01:51:53,078 - INFO - Turn 6 Val Acc: 0.7574, Test Acc: 0.7000
+2026-01-27 01:51:55,118 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:51:58,652 - INFO - Turn 8 Val Acc: 0.7396, Test Acc: 0.6882
+2026-01-27 01:52:00,544 - INFO - Turn 9 Val Acc: 0.7692, Test Acc: 0.7118
+2026-01-27 01:52:02,497 - INFO - Turn 10 Val Acc: 0.8047, Test Acc: 0.7294
+2026-01-27 01:52:02,666 - INFO - Best dialogue result - Val Acc: 0.8047, Test Acc: 0.7294
+2026-01-27 01:52:03,314 - INFO - Total token usage = 157134
+2026-01-27 01:52:05,285 - INFO - Turn 1 Val Acc: 0.7278, Test Acc: 0.7471
+2026-01-27 01:52:07,386 - INFO - Turn 2 Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:52:09,138 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7294
+2026-01-27 01:52:10,903 - INFO - Turn 4 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:52:13,022 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:52:16,402 - INFO - Turn 6 Val Acc: 0.7574, Test Acc: 0.7941
+2026-01-27 01:52:18,355 - INFO - Turn 7 Val Acc: 0.7515, Test Acc: 0.7706
+2026-01-27 01:52:20,927 - INFO - Turn 8 Val Acc: 0.7633, Test Acc: 0.7412
+2026-01-27 01:52:22,588 - INFO - Turn 9 Val Acc: 0.7811, Test Acc: 0.7824
+2026-01-27 01:52:24,481 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7235
+2026-01-27 01:52:24,659 - INFO - Best dialogue result - Val Acc: 0.7811, Test Acc: 0.7588
+2026-01-27 01:52:25,708 - INFO - After selection - Val Acc: 0.7870, Test Acc: 0.7529
+2026-01-27 01:52:25,716 - INFO - Total token usage = 199172
+2026-01-27 01:52:27,855 - INFO - Turn 1 Val Acc: 0.7574, Test Acc: 0.7529
+2026-01-27 01:52:30,112 - INFO - Turn 2 Val Acc: 0.7870, Test Acc: 0.7529
+2026-01-27 01:52:31,979 - INFO - Turn 3 Val Acc: 0.7633, Test Acc: 0.7235
+2026-01-27 01:52:34,907 - INFO - Turn 4 Val Acc: 0.7751, Test Acc: 0.7765
+2026-01-27 01:52:36,809 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7588
+2026-01-27 01:52:38,612 - INFO - Turn 6 Val Acc: 0.7515, Test Acc: 0.7706
+2026-01-27 01:52:40,339 - INFO - Turn 7 Val Acc: 0.7515, Test Acc: 0.7529
+2026-01-27 01:52:42,471 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7588
+2026-01-27 01:52:44,351 - INFO - Turn 9 Val Acc: 0.7515, Test Acc: 0.7588
+2026-01-27 01:52:46,077 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:52:46,253 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7529
+2026-01-27 01:52:46,981 - INFO - Total token usage = 241048
+2026-01-27 01:52:49,915 - INFO - Turn 1 Val Acc: 0.7515, Test Acc: 0.7529
+2026-01-27 01:52:51,867 - INFO - Turn 2 Val Acc: 0.7692, Test Acc: 0.7471
+2026-01-27 01:52:53,937 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:52:55,751 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7647
+2026-01-27 01:52:57,532 - INFO - Turn 5 Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:52:59,198 - INFO - Turn 6 Val Acc: 0.7574, Test Acc: 0.7529
+2026-01-27 01:53:00,966 - INFO - Turn 7 Val Acc: 0.7692, Test Acc: 0.7529
+2026-01-27 01:53:02,610 - INFO - Turn 8 Val Acc: 0.7456, Test Acc: 0.7765
+2026-01-27 01:53:04,420 - INFO - Turn 9 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:53:05,854 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7353
+2026-01-27 01:53:06,028 - INFO - Best dialogue result - Val Acc: 0.7751, Test Acc: 0.7529
+2026-01-27 01:53:07,060 - INFO - After selection - Val Acc: 0.7870, Test Acc: 0.7176
+2026-01-27 01:53:07,068 - INFO - Total token usage = 282901
+2026-01-27 01:53:08,983 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7294
+2026-01-27 01:53:11,391 - INFO - Turn 2 Val Acc: 0.7633, Test Acc: 0.7588
+2026-01-27 01:53:13,062 - INFO - Turn 3 Val Acc: 0.7811, Test Acc: 0.7765
+2026-01-27 01:53:14,522 - INFO - Turn 4 Val Acc: 0.7574, Test Acc: 0.7412
+2026-01-27 01:53:16,952 - INFO - Turn 5 Val Acc: 0.7574, Test Acc: 0.7765
+2026-01-27 01:53:18,689 - INFO - Turn 6 Val Acc: 0.7692, Test Acc: 0.7176
+2026-01-27 01:53:20,327 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7176
+2026-01-27 01:53:24,902 - INFO - Turn 8 Val Acc: 0.7692, Test Acc: 0.7294
+2026-01-27 01:53:26,563 - INFO - Turn 9 Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:53:28,500 - INFO - Turn 10 Val Acc: 0.7633, Test Acc: 0.7529
+2026-01-27 01:53:28,677 - INFO - Best dialogue result - Val Acc: 0.7870, Test Acc: 0.7647
+2026-01-27 01:53:29,767 - INFO - After selection - Val Acc: 0.7396, Test Acc: 0.7529
+2026-01-27 01:53:29,776 - INFO - Total token usage = 324950
+2026-01-27 01:53:31,927 - INFO - Turn 1 Val Acc: 0.7633, Test Acc: 0.7647
+2026-01-27 01:53:34,084 - INFO - Turn 2 Val Acc: 0.7515, Test Acc: 0.7529
+2026-01-27 01:53:35,754 - INFO - Turn 3 Val Acc: 0.7692, Test Acc: 0.7059
+2026-01-27 01:53:37,660 - INFO - Turn 4 Val Acc: 0.7692, Test Acc: 0.7353
+2026-01-27 01:53:39,424 - INFO - Turn 5 Val Acc: 0.7633, Test Acc: 0.7059
+2026-01-27 01:53:41,299 - INFO - Turn 6 Val Acc: 0.7396, Test Acc: 0.7529
+2026-01-27 01:53:43,627 - INFO - Turn 7 Val Acc: 0.7633, Test Acc: 0.7706
+2026-01-27 01:53:45,517 - INFO - Turn 8 Val Acc: 0.7574, Test Acc: 0.7588
+2026-01-27 01:53:47,295 - INFO - Turn 9 Val Acc: 0.7751, Test Acc: 0.7235
+2026-01-27 01:53:48,841 - INFO - Turn 10 Val Acc: 0.7692, Test Acc: 0.7647
+2026-01-27 01:53:49,014 - INFO - Best dialogue result - Val Acc: 0.7751, Test Acc: 0.7235
+2026-01-27 01:53:50,038 - INFO - After selection - Val Acc: 0.7929, Test Acc: 0.7824
+2026-01-27 01:53:50,047 - INFO - Total token usage = 366863
+2026-01-27 01:53:50,219 - INFO - Total token usage = 366863

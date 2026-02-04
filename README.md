@@ -8,6 +8,8 @@ History Database, and Warm-up Module.
 [![bench](bench.png)](bench.pdf)
 For the extended table and experiment of our LATTEBench paper, please refer to [Appendix](./Appendix.pdf).
 
+For our open-source execution logs and related descriptions, please refer to [About logs](./LATTEBench/execution_logs/README.md).
+
 ## Environment Setup
 
 ### 1. Install Dependencies
@@ -215,9 +217,6 @@ python latte.py --method ToT --data_name credit-g --num_thoughts 3 --max_steps 5
 ### Usage Examples
 
 ```bash
-# Run all methods, all datasets, all seeds
-python bench.py
-
 # Run only specified methods
 python bench.py --methods CoT Critic OPRO
 
@@ -232,9 +231,6 @@ python bench.py --llm_model gpt-4o-mini
 
 # Preview mode (display commands without executing)
 python bench.py --dry_run
-
-# Force re-run
-python bench.py --force
 
 # Save configuration
 python bench.py --save_config my_config.json --dry_run
@@ -254,30 +250,36 @@ During execution, the following is displayed:
 ======================================================================
 LATTEBench Benchmark Runner
 ======================================================================
-Methods: ['CoT', 'Critic']
-Datasets: ['credit-g', 'vehicle']
-Seeds: [1, 2, 3]
+Methods: ['CoT', 'ToT']
+Datasets: ['credit-g', 'diamonds']
+Seeds: [1, 2]
 LLM Model: gpt-4o
-Total experiments: 12
+Total experiments: 8
 ======================================================================
 
-[1/12] RUN: CoT | credit-g | NL | seed=1
-         SUCCESS (45.2s)
+[1/8] RUN: CoT | credit-g | NL | seed=1
+         SUCCESS (124.7s)
 
-[2/12] SKIP: CoT | credit-g | NL | seed=2
-         Log exists: credit-g_CoT_gpt-4o_3_2.log
+[2/8] RUN: CoT | credit-g | NL | seed=2
+         SUCCESS (142.5s)
+
+[3/8] RUN: CoT | diamonds | NL | seed=1
 ...
 ```
 
-After execution, metrics are parsed from log files and summarized by method:
+After execution, metrics are parsed from log files and summarized by method and dataset:
+
+<details>
+<summary>View Example</summary>
+
 
 ```
 ======================================================================
 BENCHMARK SUMMARY
 ======================================================================
-Total wall time: 1234.5s (20.6m)
-Completed: 10
-Skipped:   2
+Total wall time: 6577.7s (109.6m)
+Completed: 8
+Skipped:   0
 Failed:    0
 
 ----------------------------------------------------------------------
@@ -285,29 +287,38 @@ METRICS BY METHOD (parsed from log files)
 ----------------------------------------------------------------------
 
 [CoT]
-  Avg Time:         312.45s (6 runs)
-  Avg Tokens:       48350 (6 runs)
-  Avg Val (Best):   0.7789 (6 runs)
-  Avg Test (RF):    0.7623 (6 runs)
-  Avg Test (AG):    0.7856 (6 runs)
-  Avg Success Rate: 82.00% (overall 246/300=82.00%, 6 runs)
+  <credit-g> (2 runs)
+    Avg Time:         70.09s (2/2 valid)
+    Avg Tokens:       25508 (2/2 valid)
+    Avg Val (Best):   0.8100 (2/2 valid)
+    Avg Test (RF):    0.7475 (2/2 valid)
+    Avg Test (AG):    0.7475 (2/2 valid)
+    Avg Success Rate: 50.00% (overall 10/20=50.00%, 2 runs)
+  <diamonds> (2 runs)
+    Avg Time:         1495.72s (2/2 valid)
+    Avg Tokens:       22224 (2/2 valid)
+    Avg Success Rate: 75.00% (overall 15/20=75.00%, 2 runs)
 
-[Critic]
-  Avg Time:         425.12s (6 runs)
-  Avg Tokens:       92100 (6 runs)
-  Avg Val (Best):   0.7834 (6 runs)
-  Avg Test (RF):    0.7701 (6 runs)
-  Avg Test (AG):    0.7912 (6 runs)
-  Avg Success Rate: 78.67% (overall 236/300=78.67%, 6 runs)
+[ToT]
+  <credit-g> (2 runs)
+    Avg Time:         58.93s (2/2 valid)
+    Avg Test (RF):    0.7550 (2/2 valid)
+    Avg Test (AG):    0.7700 (2/2 valid)
+    Avg Success Rate: 80.00% (overall 12/14=85.71%, 2 runs)
+  <diamonds> (2 runs)
+    Avg Time:         887.00s (2/2 valid)
+    Avg Success Rate: 30.00% (overall 5/18=27.78%, 2 runs)
 
 ======================================================================
 
-Results saved to: ./log/bench_results_20240101_120000.json
+Results saved to: ./log/bench_results_20260204_175246.json
 ```
+</details>
+
 
 #### Metrics Description
 
-All metrics are extracted by parsing each experiment's log file (produced by `latte.py`):
+All metrics are extracted by parsing each experiment's log file (produced by `latte.py`). Metrics are grouped by method and dataset.
 
 | Metric | Source in Log | Description |
 |--------|--------------|-------------|
@@ -317,6 +328,10 @@ All metrics are extracted by parsing each experiment's log file (produced by `la
 | Avg Test (RF) | `final_test_acc_rf = ...` | Average final test accuracy (RandomForest) |
 | Avg Test (AG) | `final_test_acc_ag = ...` | Average final test accuracy (AutoGluon) |
 | Avg Success Rate | Error/Warning per iteration | Ratio of iterations with no Error/Warning |
+
+**Valid Sample Count:**
+- Each metric shows `(X/Y valid)` where X is the number of runs with valid values and Y is the total completed runs
+- When no improvement is found during an experiment (no best dataset generated), both `final_test_acc_rf` and `final_test_acc_ag` are logged as `None` and excluded from the average calculation
 
 **Success Rate Details:**
 - An iteration is counted as **successful** if it contains no `ERROR`, `WARNING` (log level), or `Warning:` (message content)

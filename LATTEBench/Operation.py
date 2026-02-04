@@ -298,7 +298,7 @@ def collect_data(task_name, seed, random_sample=False, sample_size=30):
     all_acc = []
     with open('data/'+ f'{task_name}/seed{seed}' + '/STANDALONE.adata', 'rb') as f:
         for line in f:
-            line = line.decode('utf-8')  # 将二进制行解码为字符串
+            line = line.decode('utf-8')  # Decode binary line to string
             line = [float(item) for item in line.split(',')]
             if end_idx in line:
                 # print(line)
@@ -307,7 +307,7 @@ def collect_data(task_name, seed, random_sample=False, sample_size=30):
                 # print(data)
                 all_acc.append(line[end+1])
                 data_list = data[:-1]
-                # 将剩余的元素转换为整数
+                # Convert remaining elements to integers
                 # data_list = [int(item) for item in data_list if item.isdigit()]
                 data_list = split_list(data_list, 4.0)
                 data_list = [[int(item) for item in sublist] for sublist in data_list]
@@ -326,12 +326,12 @@ def collect_data(task_name, seed, random_sample=False, sample_size=30):
         acc = all_acc
     with open ('acc.txt', 'w') as f:
         original_stdout = sys.stdout
-        # 重定向stdout到文件
+        # Redirect stdout to file
         sys.stdout = f
         for i in range(len(acc)):
             print(acc[i])
     with open('prompt.txt', 'w') as f:
-    # 保存原始的stdout
+    # Save original stdout
         sys.stdout = f
         
         for i in range(len(database)):
@@ -351,7 +351,7 @@ def collect_data(task_name, seed, random_sample=False, sample_size=30):
             print(op_string)
                 # op = show_ops(ops)
                 # print(new_string, end=',')
-    sys.stdout = original_stdout  # 重置stdout
+    sys.stdout = original_stdout  # Reset stdout
 
 
     

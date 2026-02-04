@@ -641,12 +641,22 @@ class BenchmarkRunner:
 
         # Parse log files to get actual metrics
         all_experiments = self.results + self.skipped
-        method_metrics = {}  # {method: {'time': [], 'tokens': [], 'val': [], 'test_rf': [], 'test_ag': [], 'success_rate': []}}
+
+        def _new_bucket():
+            return {
+                'time': [], 'tokens': [], 'val': [], 'test_rf': [], 'test_ag': [],
+                'success_rate': [], 'total_iters': [], 'success_iters': [],
+                'num_completed': 0
+            }
+
+        # {method: {dataset: {<bucket>}}}
+        method_dataset_metrics = {}
 
         for exp in all_experiments:
             method = exp['method']
+            data_name = exp['data_name']
             log_filename = get_log_filename(
-                method, exp['data_name'], exp.get('output_format', 'NL'),
+                method, data_name, exp.get('output_format', 'NL'),
                 self.args.llm_model, self.args.metadata_cat, exp['seed']
             )
             log_filepath = os.path.join(self.args.log_path, log_filename)
@@ -654,73 +664,62 @@ class BenchmarkRunner:
             success_metrics = parse_log_success_rate(log_filepath, method)
 
             if metrics:
-                if method not in method_metrics:
-                    method_metrics[method] = {
-                        'time': [], 'tokens': [], 'val': [], 'test_rf': [], 'test_ag': [],
-                        'success_rate': [], 'total_iters': [], 'success_iters': []
-                    }
+                if method not in method_dataset_metrics:
+                    method_dataset_metrics[method] = {}
+                if data_name not in method_dataset_metrics[method]:
+                    method_dataset_metrics[method][data_name] = _new_bucket()
+
+                bucket = method_dataset_metrics[method][data_name]
+                bucket['num_completed'] += 1
                 if 'total_time' in metrics:
-                    method_metrics[method]['time'].append(metrics['total_time'])
+                    bucket['time'].append(metrics['total_time'])
                 if 'total_tokens' in metrics:
-                    method_metrics[method]['tokens'].append(metrics['total_tokens'])
+                    bucket['tokens'].append(metrics['total_tokens'])
                 if 'best_val' in metrics:
-                    method_metrics[method]['val'].append(metrics['best_val'])
+                    bucket['val'].append(metrics['best_val'])
                 if 'final_test_rf' in metrics:
-                    method_metrics[method]['test_rf'].append(metrics['final_test_rf'])
+                    bucket['test_rf'].append(metrics['final_test_rf'])
                 if 'final_test_ag' in metrics:
-                    method_metrics[method]['test_ag'].append(metrics['final_test_ag'])
+                    bucket['test_ag'].append(metrics['final_test_ag'])
 
                 # Add success rate metrics
                 if success_metrics:
-                    method_metrics[method]['success_rate'].append(success_metrics['success_rate'])
-                    method_metrics[method]['total_iters'].append(success_metrics['total_iters'])
-                    method_metrics[method]['success_iters'].append(success_metrics['success_iters'])
+                    bucket['success_rate'].append(success_metrics['success_rate'])
+                    bucket['total_iters'].append(success_metrics['total_iters'])
+                    bucket['success_iters'].append(success_metrics['success_iters'])
 
-        if method_metrics:
-            print("\n" + "-" * 70)
-            print("METRICS BY METHOD (parsed from log files)")
-            print("-" * 70)
+        def _print_bucket(m, total_runs, indent="  "):
+            """Print metrics for a single bucket."""
+            if m['time']:
+                avg_time = sum(m['time']) / len(m['time'])
+                print(f"{indent}Avg Time:         {avg_time:.2f}s ({len(m['time'])}/{total_runs} valid)")
+            if m['tokens']:
+                avg_tokens = sum(m['tokens']) / len(m['tokens'])
+                print(f"{indent}Avg Tokens:       {avg_tokens:.0f} ({len(m['tokens'])}/{total_runs} valid)")
+            if m['val']:
+                avg_val = sum(m['val']) / len(m['val'])
+                print(f"{indent}Avg Val (Best):   {avg_val:.4f} ({len(m['val'])}/{total_runs} valid)")
+            if m['test_rf']:
+                avg_test_rf = sum(m['test_rf']) / len(m['test_rf'])
+                print(f"{indent}Avg Test (RF):    {avg_test_rf:.4f} ({len(m['test_rf'])}/{total_runs} valid)")
+            if m['test_ag']:
+                avg_test_ag = sum(m['test_ag']) / len(m['test_ag'])
+                print(f"{indent}Avg Test (AG):    {avg_test_ag:.4f} ({len(m['test_ag'])}/{total_runs} valid)")
+            if m['success_rate']:
+                avg_sr = sum(m['success_rate']) / len(m['success_rate'])
+                total_si = sum(m['success_iters'])
+                total_ti = sum(m['total_iters'])
+                overall_sr = total_si / total_ti if total_ti > 0 else 0.0
+                print(f"{indent}Avg Success Rate: {avg_sr:.2%} (overall {total_si}/{total_ti}={overall_sr:.2%}, {len(m['success_rate'])} runs)")
 
-            for method in sorted(method_metrics.keys()):
-                m = method_metrics[method]
-                print(f"\n[{method}]")
-
-                if m['time']:
-                    avg_time = sum(m['time']) / len(m['time'])
-                    print(f"  Avg Time:         {avg_time:.2f}s ({len(m['time'])} runs)")
-
-                if m['tokens']:
-                    avg_tokens = sum(m['tokens']) / len(m['tokens'])
-                    print(f"  Avg Tokens:       {avg_tokens:.0f} ({len(m['tokens'])} runs)")
-
-                if m['val']:
-                    avg_val = sum(m['val']) / len(m['val'])
-                    print(f"  Avg Val (Best):   {avg_val:.4f} ({len(m['val'])} runs)")
-
-                if m['test_rf']:
-                    avg_test_rf = sum(m['test_rf']) / len(m['test_rf'])
-                    print(f"  Avg Test (RF):    {avg_test_rf:.4f} ({len(m['test_rf'])} runs)")
-
-                if m['test_ag']:
-                    avg_test_ag = sum(m['test_ag']) / len(m['test_ag'])
-                    print(f"  Avg Test (AG):    {avg_test_ag:.4f} ({len(m['test_ag'])} runs)")
-
-                if m['success_rate']:
-                    avg_sr = sum(m['success_rate']) / len(m['success_rate'])
-                    total_si = sum(m['success_iters'])
-                    total_ti = sum(m['total_iters'])
-                    overall_sr = total_si / total_ti if total_ti > 0 else 0.0
-                    print(f"  Avg Success Rate: {avg_sr:.2%} (overall {total_si}/{total_ti}={overall_sr:.2%}, {len(m['success_rate'])} runs)")
-
-        print("\n" + "=" * 70)
-
-        # Compute summary statistics for JSON output
-        summary_stats = {}
-        for method, m in method_metrics.items():
+        def _bucket_stats(m):
+            """Compute summary stats dict from a bucket."""
             total_si = sum(m['success_iters']) if m['success_iters'] else 0
             total_ti = sum(m['total_iters']) if m['total_iters'] else 0
-            summary_stats[method] = {
-                'num_runs': max(len(m['time']), len(m['val']), 1),
+            return {
+                'num_completed': m['num_completed'],
+                'num_valid_test_rf': len(m['test_rf']),
+                'num_valid_test_ag': len(m['test_ag']),
                 'avg_time': sum(m['time']) / len(m['time']) if m['time'] else None,
                 'avg_tokens': sum(m['tokens']) / len(m['tokens']) if m['tokens'] else None,
                 'avg_val': sum(m['val']) / len(m['val']) if m['val'] else None,
@@ -737,6 +736,31 @@ class BenchmarkRunner:
                 'raw_test_ag': m['test_ag'],
                 'raw_success_rate': m['success_rate'],
             }
+
+        if method_dataset_metrics:
+            print("\n" + "-" * 70)
+            print("METRICS BY METHOD (parsed from log files)")
+            print("-" * 70)
+
+            for method in sorted(method_dataset_metrics.keys()):
+                datasets = method_dataset_metrics[method]
+                print(f"\n[{method}]")
+
+                # Per-dataset breakdown
+                for data_name in sorted(datasets.keys()):
+                    m = datasets[data_name]
+                    ds_runs = m['num_completed']
+                    print(f"  <{data_name}> ({ds_runs} runs)")
+                    _print_bucket(m, ds_runs, indent="    ")
+
+        print("\n" + "=" * 70)
+
+        # Compute summary statistics for JSON output
+        summary_stats = {}
+        for method, datasets in method_dataset_metrics.items():
+            summary_stats[method] = {}
+            for data_name, m in datasets.items():
+                summary_stats[method][data_name] = _bucket_stats(m)
 
         # Save results to JSON
         results_file = os.path.join(self.args.log_path,

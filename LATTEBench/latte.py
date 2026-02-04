@@ -223,14 +223,20 @@ def save_improved(data_name, new_train, new_val, new_test, metadata, new_val_acc
 
 
 def final_summary(args, logger, target, task_type, score_list, best_performance,
-                  best_metadata, total_token_usage, total_start_time):
+                  best_metadata, total_token_usage, total_start_time,
+                  initial_test_acc=None):
     """Log final summary."""
     total_end_time = time.time()
-    train_data, test_data = Evaluator.best_dataset(args.data_name)
-    predictor, test_acc = Evaluator.train_and_evaluate(train_data, test_data, target, task_type)
-    logger.info(f"final_test_acc_ag = {test_acc}")
-    predictor, test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
-    logger.info(f"final_test_acc_rf = {test_acc}")
+    try:
+        train_data, test_data = Evaluator.best_dataset(args.data_name)
+        predictor, test_acc = Evaluator.train_and_evaluate(train_data, test_data, target, task_type)
+        logger.info(f"final_test_acc_ag = {test_acc}")
+        predictor, test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
+        logger.info(f"final_test_acc_rf = {test_acc}")
+    except Exception as e:
+        logger.warning(f"No best dataset found: {e}")
+        logger.info(f"final_test_acc_ag = None")
+        logger.info(f"final_test_acc_rf = None")
     logger.info(f"Total token usage = {total_token_usage}")
     logger.info(f"Score list = {score_list}")
     logger.info(f"Best performance = {best_performance}")
@@ -283,8 +289,8 @@ def run_CoT(args, logger, df_train, target, task_type, k):
         prompt_list = ser.generate_initial_prompt()
         prompt = prompt_list[0]
 
-        # history feedback
-        if args.history:
+        # history feedback (only when not using top-k)
+        if args.history and not args.top:
             rejected_history = sorted([d for d in history if next(iter(d.values())) <= 0.0],
                                       key=lambda d: next(iter(d.values())), reverse=True)
             accepted_history = sorted([d for d in history if next(iter(d.values())) > 0.0],
@@ -292,7 +298,7 @@ def run_CoT(args, logger, df_train, target, task_type, k):
             prompt += f"\nAccepted features so far: \n{accepted_history}"
             prompt += f"\nRejected features so far: \n{rejected_history}"
 
-        # top-k feedback
+        # top-k feedback (replaces history feedback when enabled)
         if args.top and i > 0:
             ops, rpns, scores = store.top_k(min(i, 3))
             prompt += f"\nThese are the current top new features and their score (accuracy gain):\n"
@@ -358,7 +364,7 @@ def run_CoT(args, logger, df_train, target, task_type, k):
 
     store.close()
     final_summary(args, logger, target, task_type, score_list, best_performance,
-                  best_metadata, total_token_usage, total_start_time)
+                  best_metadata, total_token_usage, total_start_time, test_acc)
 
 
 # ============================================================
@@ -461,7 +467,7 @@ def run_Critic(args, logger, df_train, target, task_type, k):
 
     store.close()
     final_summary(args, logger, target, task_type, score_list, best_performance,
-                  best_metadata, total_token_usage, total_start_time)
+                  best_metadata, total_token_usage, total_start_time, test_acc)
 
 
 # ============================================================
@@ -477,9 +483,9 @@ def run_OPROc(args, logger, df_train, target, task_type, k):
 
     train_data, val_data, test_data = Evaluator.load_dataset(args.data_name)
     predictor, val_acc = Evaluator.train_and_evaluate_rf(train_data, val_data, target, task_type)
-    _, test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
+    _, initial_test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
     logger.info(f"Initial val_acc = {val_acc}")
-    logger.info(f"Initial test_acc = {test_acc}")
+    logger.info(f"Initial test_acc = {initial_test_acc}")
 
     score_list = [val_acc]
     best_performance = val_acc
@@ -621,11 +627,16 @@ def run_OPROc(args, logger, df_train, target, task_type, k):
         logger.info(f"Total token usage = {total_token_usage}")
 
     total_end_time = time.time()
-    train_data, test_data = Evaluator.best_dataset(args.data_name)
-    predictor, test_acc = Evaluator.train_and_evaluate(train_data, test_data, target, task_type)
-    logger.info(f"final_test_acc_ag = {test_acc}")
-    predictor, test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
-    logger.info(f"final_test_acc_rf = {test_acc}")
+    try:
+        train_data, test_data = Evaluator.best_dataset(args.data_name)
+        predictor, test_acc = Evaluator.train_and_evaluate(train_data, test_data, target, task_type)
+        logger.info(f"final_test_acc_ag = {test_acc}")
+        predictor, test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
+        logger.info(f"final_test_acc_rf = {test_acc}")
+    except Exception as e:
+        logger.warning(f"No best dataset found: {e}")
+        logger.info(f"final_test_acc_ag = None")
+        logger.info(f"final_test_acc_rf = None")
     logger.info(f"Total token usage = {total_token_usage}")
     logger.info(f"Score list = {score_list}")
     logger.info(f"Best performance = {best_performance}")
@@ -790,7 +801,7 @@ def run_OPRO(args, logger, df_train, target, task_type, k):
 
     store.close()
     final_summary(args, logger, target, task_type, score_list, best_performance,
-                  best_metadata, total_token_usage, total_start_time)
+                  best_metadata, total_token_usage, total_start_time, test_acc)
 
 
 # ============================================================
@@ -818,6 +829,12 @@ def run_ECoT(args, logger, df_train, target, task_type, k):
     df = pandas.read_csv(f'data/{args.data_name}/seed{args.seed}/{args.data_name}_train.csv')
     y = df.iloc[:, -1]
     df = df.iloc[:, :-1]
+
+    # Calculate initial test accuracy for fallback
+    df_test_init = pandas.read_csv(f'data/{args.data_name}/seed{args.seed}/{args.data_name}_test.csv')
+    df_train_init = pandas.read_csv(f'data/{args.data_name}/seed{args.seed}/{args.data_name}_train.csv')
+    _, initial_test_acc = Evaluator.train_and_evaluate_rf(df_train_init, df_test_init, 'target', task_type)
+    logger.info(f"Initial test_acc = {initial_test_acc}")
 
     with open('prompt.txt', 'r') as f:
         for line in f:
@@ -972,32 +989,38 @@ def run_ECoT(args, logger, df_train, target, task_type, k):
     logger.info(f"prompts number = {len(prompts)}")
     logger.info(f"acc list = {acc_list}")
     logger.info(f"best prompt = {best_prompt}, best accuracy = {max_acc}")
+    logger.info(f"Best performance = {max_acc}")
 
     # Final evaluation
-    from autogluon.tabular import TabularDataset
-    best_trans = re.findall(r'\[(.*?)\]', best_prompt)
-    df_final = pandas.read_csv(f'data/{args.data_name}/seed{args.seed}/{args.data_name}_test.csv')
-    y_final = df_final.iloc[:, -1]
-    df_final = df_final.iloc[:, :-1]
-    for trans in best_trans:
-        new_text = '[' + trans + ']'
-        trans = trans.replace('f', '')
-        trans = trans.split(',')
-        best_test = pandas.DataFrame()
-        for tran in trans:
-            ops = show_ops_r(converge(tran.split()))
-            best_test[tran] = op_post_seq(df_final, ops)
-        best_test['target'] = y_final
+    try:
+        from autogluon.tabular import TabularDataset
+        best_trans = re.findall(r'\[(.*?)\]', best_prompt)
+        df_final = pandas.read_csv(f'data/{args.data_name}/seed{args.seed}/{args.data_name}_test.csv')
+        y_final = df_final.iloc[:, -1]
+        df_final = df_final.iloc[:, :-1]
+        for trans in best_trans:
+            new_text = '[' + trans + ']'
+            trans = trans.replace('f', '')
+            trans = trans.split(',')
+            best_test = pandas.DataFrame()
+            for tran in trans:
+                ops = show_ops_r(converge(tran.split()))
+                best_test[tran] = op_post_seq(df_final, ops)
+            best_test['target'] = y_final
 
-    if best_filtered_features is not None:
-        available_features = [f for f in best_filtered_features if f in best_test.columns]
-        best_test = best_test[available_features + ['target']]
+        if best_filtered_features is not None:
+            available_features = [f for f in best_filtered_features if f in best_test.columns]
+            best_test = best_test[available_features + ['target']]
 
-    best_train = TabularDataset(f"./tmp/{args.data_name}/best_train.csv")
-    predictor, test_acc = Evaluator.train_and_evaluate(best_train, best_test, "target", task_type)
-    logger.info(f"final_test_acc_ag = {test_acc}")
-    predictor, test_acc = Evaluator.train_and_evaluate_rf(best_train, best_test, "target", task_type)
-    logger.info(f"final_test_acc_rf = {test_acc}")
+        best_train = TabularDataset(f"./tmp/{args.data_name}/best_train.csv")
+        predictor, test_acc = Evaluator.train_and_evaluate(best_train, best_test, "target", task_type)
+        logger.info(f"final_test_acc_ag = {test_acc}")
+        predictor, test_acc = Evaluator.train_and_evaluate_rf(best_train, best_test, "target", task_type)
+        logger.info(f"final_test_acc_rf = {test_acc}")
+    except Exception as e:
+        logger.warning(f"No best dataset found: {e}")
+        logger.info(f"final_test_acc_ag = None")
+        logger.info(f"final_test_acc_rf = None")
     logger.info(f"Total token usage = {total_token_usage}")
     total_end_time = time.time()
     logger.info(f"Total time used = {total_end_time - total_start_time:.2f} seconds")
@@ -1023,7 +1046,9 @@ def run_Evo(args, logger, df_train, target, task_type, k):
 
     train_data, val_data, test_data = Evaluator.load_dataset(args.data_name)
     _, baseline_acc = Evaluator.train_and_evaluate_rf(train_data, val_data, target, task_type)
+    _, initial_test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
     logger.info(f"baseline_acc = {baseline_acc}")
+    logger.info(f"Initial test_acc = {initial_test_acc}")
 
     prompts = []
     accs = []
@@ -1163,19 +1188,27 @@ def run_Evo(args, logger, df_train, target, task_type, k):
     logger.info(f"prompts number = {len(prompts)}")
     logger.info(f"acc list = {acc_list}")
     logger.info(f"best prompt = {best_prompt}, best accuracy = {max_acc}")
+    logger.info(f"Best performance = {max_acc}")
     logger.info(f"best metadata = {best_metadata}")
 
     best_train_path = f"./tmp/{args.data_name}/best_train.csv"
     best_test_path = f"./tmp/{args.data_name}/best_test.csv"
     if os.path.exists(best_train_path) and os.path.exists(best_test_path):
-        best_train = TabularDataset(best_train_path)
-        best_test = TabularDataset(best_test_path)
-        predictor, test_acc = Evaluator.train_and_evaluate(best_train, best_test, target, task_type)
-        logger.info(f"final_test_acc_ag = {test_acc}")
-        predictor, test_acc = Evaluator.train_and_evaluate_rf(best_train, best_test, target, task_type)
-        logger.info(f"final_test_acc_rf = {test_acc}")
+        try:
+            best_train = TabularDataset(best_train_path)
+            best_test = TabularDataset(best_test_path)
+            predictor, test_acc = Evaluator.train_and_evaluate(best_train, best_test, target, task_type)
+            logger.info(f"final_test_acc_ag = {test_acc}")
+            predictor, test_acc = Evaluator.train_and_evaluate_rf(best_train, best_test, target, task_type)
+            logger.info(f"final_test_acc_rf = {test_acc}")
+        except Exception as e:
+            logger.warning(f"Error evaluating best dataset: {e}")
+            logger.info(f"final_test_acc_ag = None")
+            logger.info(f"final_test_acc_rf = None")
     else:
-        logger.info("No improvements found")
+        logger.warning("No best dataset found")
+        logger.info(f"final_test_acc_ag = None")
+        logger.info(f"final_test_acc_rf = None")
 
     logger.info(f"Total token usage = {total_token_usage}")
     total_end_time = time.time()
@@ -1198,10 +1231,10 @@ def run_ToT(args, logger, df_train, target, task_type, k):
     if downstream == "rf":
         predictor, val_metrics = Evaluator.train_and_evaluate_all_rf(train_data, val_data, target, task_type)
         _, test_metrix = Evaluator.train_and_evaluate_all_rf(train_data, test_data, target, task_type)
-        test_acc, _, _, _ = test_metrix
+        initial_test_acc, _, _, _ = test_metrix
     val_accuracy, _, _, _ = val_metrics
     logger.info(f"val_acc = {val_accuracy}")
-    logger.info(f"test_acc = {test_acc}")
+    logger.info(f"test_acc = {initial_test_acc}")
 
     ser = make_serializer(args, target)
     task_str, features_str, data_sample = ser.generate_prompt_components()
@@ -1253,7 +1286,9 @@ def run_ToT(args, logger, df_train, target, task_type, k):
         predictor, test_acc = Evaluator.train_and_evaluate_rf(train_data, test_data, target, task_type)
         logger.info(f"final_test_acc_rf = {test_acc}")
     except Exception as e:
-        logger.info(f"No best dataset found for final evaluation: {e}")
+        logger.warning(f"No best dataset found: {e}")
+        logger.info(f"final_test_acc_ag = None")
+        logger.info(f"final_test_acc_rf = None")
 
     logger.info(f"Total time used = {end_time - total_start_time:.2f} seconds")
     logger.info("========== END ==========")

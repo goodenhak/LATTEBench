@@ -24,9 +24,9 @@ class island():
         return self.texts[rand_idx[0]] + ' \n' + self.texts[rand_idx[1]] + ' \n'
     def get_prompts_fun(self):
         combined = list(zip(self.texts, self.accs))
-        # 按照 accs 排序
+        # Sort by accs
         combined.sort(key=lambda x: x[1], reverse=True)
-        # 返回 accs 最大的两个值对应的 texts
+        # Return texts corresponding to the two highest accs values
         return combined[1][0] + '\n' + combined[0][0] + '\n'
     def transfer(self):
         text_list, acc_list = self.sort_prompts()
@@ -59,28 +59,28 @@ class island_group():
     def add_island(self, island):
         self.islands.append(island)
     def sort_transfer_islands(self):
-        # 根据 island.accs 的最大值对 islands 列表进行排序
+        # Sort islands list based on the maximum value of island.accs
         self.islands.sort(key=lambda island: max(island.accs), reverse=True)
 
-        # 计算 "good" 和 "bad" 的分界点
+        # Calculate the split point for "good" and "bad"
         split_point = len(self.islands) // 2
 
-        # 将 islands 列表分为 "good" 和 "bad" 两部分
+        # Split islands list into "good" and "bad" parts
         good_islands = self.islands[:split_point]
         bad_islands = self.islands[split_point:]
 
-        # 返回 "good" 和 "bad" 的 island 的索引
+        # Return indices of "good" and "bad" islands
         good_indices = [self.islands.index(island) for island in good_islands]
         bad_indices = [self.islands.index(island) for island in bad_islands]
         for bad_index in bad_indices:
-            # 清空 bad_island 的 text 和 accs
+            # Clear text and accs of bad_island
             self.islands[bad_index].text = []
             self.islands[bad_index].accs = []
 
-            # 从 good_indices 中随机选择一个 island
+            # Randomly select an island from good_indices
             good_index = random.choice(good_indices)
 
-            # 复制 good_island 的前两个个体
+            # Copy the first two individuals from good_island
             tex, acc = self.islands[good_index].transfer()
             self.islands[bad_index].text.extend(tex)
             self.islands[bad_index].accs.extend(acc)

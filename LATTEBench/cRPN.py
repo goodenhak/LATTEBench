@@ -1,6 +1,6 @@
 import zss  # pip install zss
 
-# ========= 树节点 =========
+# ========= Tree Node =========
 class Node(zss.Node):
     def __init__(self, label, children=None):
         super().__init__(label)
@@ -8,22 +8,22 @@ class Node(zss.Node):
             for c in children:
                 self.addkid(c)
 
-# ========= 后缀表达式 → 树 =========
+# ========= Postfix Expression -> Tree =========
 def postfix_to_tree(expr):
     tokens = expr.split()
-    if len(tokens) == 1 and tokens[0].startswith("f"):  # 原子特征
+    if len(tokens) == 1 and tokens[0].startswith("f"):  # Atomic feature
         return Node(tokens[0])
 
     stack = []
     for t in tokens:
         if t.startswith("f"):
             stack.append(Node(t))
-        else:  # 二元或一元运算符
+        else:  # Binary or unary operator
             if len(stack) >= 2:
                 right = stack.pop()
                 left = stack.pop()
                 stack.append(Node(t, [left, right]))
-            elif len(stack) == 1:  # 单目运算
+            elif len(stack) == 1:  # Unary operation
                 child = stack.pop()
                 stack.append(Node(t, [child]))
             else:
@@ -32,7 +32,7 @@ def postfix_to_tree(expr):
         raise ValueError(f"Invalid postfix expression: {expr}")
     return stack[0]
 
-# ========= 树编辑距离 =========
+# ========= Tree Edit Distance =========
 def tree_edit_distance(t1, t2):
     return zss.simple_distance(
         t1, t2,
@@ -46,7 +46,7 @@ def tree_edit_distance(t1, t2):
 def tree_size(t):
     return 1 + sum(tree_size(c) for c in t.children)
 
-# ========= 两个表达式列表的相似度 =========
+# ========= Similarity Between Two Expression Lists =========
 def expr_list_similarity(exprs1, exprs2):
     sims = []
     for expr1 in exprs1:
@@ -61,7 +61,7 @@ def expr_list_similarity(exprs1, exprs2):
         sims.append(best_sim)
     return sum(sims) / len(sims) if sims else 1.0
 
-# # ========= 示例 =========
+# # ========= Example =========
 # if __name__ == "__main__":
 #     exprs1 = ["f1", "f2", "f3", "f4", "f3 square"]
 #     exprs2 = ["f1", "f2", "f3", "f4", "f3 square", "f3 reciprocal"]
@@ -73,13 +73,13 @@ def expr_list_similarity(exprs1, exprs2):
 
 def init_feature_map(metadata):
     """
-    根据初始metadata生成特征映射
+    Generate feature mapping from initial metadata.
     metadata: dict, e.g. {"Airline":"Airline","Flight":"Flight","Time":"Time","Length":"Length"}
-    return: dict {特征名: 后缀表达式}
+    return: dict {feature_name: postfix_expression}
     """
     feature_map = {}
     for idx, col in enumerate(metadata.keys(), start=1):
-        feature_map[col] = f"f{idx}"  # 初始特征直接映射为 f1,f2,...
+        feature_map[col] = f"f{idx}"  # Initial features directly mapped to f1, f2, ...
     return feature_map
 
 
@@ -92,10 +92,10 @@ def is_number(s: str) -> bool:
 
 def update_feature_map(feature_map, operations):
     """
-    根据操作列表更新特征映射（支持链式引用，多轮更新）
-    feature_map: dict, 当前特征映射，{特征名: 后缀表达式}
-    operations: list[dict], 每个新特征定义
-    return: dict, 更新后的特征映射
+    Update feature mapping based on operation list (supports chained references, multi-round updates).
+    feature_map: dict, current feature mapping, {feature_name: postfix_expression}
+    operations: list[dict], definition of each new feature
+    return: dict, updated feature mapping
     """
     for op in operations:
 
@@ -104,13 +104,13 @@ def update_feature_map(feature_map, operations):
         f1 = op["feature1"]
         f2 = op.get("feature2")
 
-        # 确保输入特征存在
+        # Ensure input features exist
         if f1 not in feature_map:
             raise ValueError(f"Feature {f1} not found")
         if f2 and f2 not in feature_map and is_number(f2)==False:
             raise ValueError(f"Feature {f2} not found")
 
-        # 完全展开
+        # Fully expand
         expr1 = feature_map[f1]
         if f2:
             if is_number(f2)==False:
@@ -131,27 +131,27 @@ def update_feature_map(feature_map, operations):
 
 def metadata_to_expr_list(metadata, feature_map):
     """
-    根据metadata和特征映射生成后缀表达式列表。
+    Generate postfix expression list based on metadata and feature mapping.
 
     Parameters
     ----------
     metadata : dict
-        其键为列/特征名（顺序即输出顺序），值内容无关。
+        Its keys are column/feature names (order determines output order), values are irrelevant.
     feature_map : dict[str, str]
-        {特征名: 后缀表达式或 'fN'}，要求包含 metadata 中的所有键。
+        {feature_name: postfix_expression or 'fN'}, must contain all keys in metadata.
 
     Returns
     -------
     list[str]
-        与 metadata 键一一对应的后缀表达式（或单个 fN）。
+        Postfix expressions (or single fN) corresponding to metadata keys.
 
     Raises
     ------
     KeyError
-        当 metadata 的某个键不在 feature_map 中时抛出。
+        When a key in metadata is not found in feature_map.
     """
     expr_list = []
-    for key in metadata.keys():  # 依 metadata 键的插入顺序
+    for key in metadata.keys():  # Iterate by metadata key insertion order
         try:
             expr = feature_map[key]
         except KeyError:
@@ -162,72 +162,73 @@ def metadata_to_expr_list(metadata, feature_map):
 
 def expr_list_to_feature_names(expr_list, metadata):
     """
-    将后缀表达式列表中的f_n翻译回初始特征名称。
+    Translate f_n in postfix expression list back to initial feature names.
 
     Parameters
     ----------
     expr_list : list[str]
-        后缀表达式列表，包含f1, f2等特征引用。
+        Postfix expression list containing feature references like f1, f2, etc.
     metadata : dict
-        初始的metadata字典，其键为特征名，顺序与f1, f2, f3对应。
+        Initial metadata dictionary, whose keys are feature names,
+        in order corresponding to f1, f2, f3.
 
     Returns
     -------
     list[str]
-        将f_n替换为对应特征名称后的表达式列表。
+        Expression list with f_n replaced by corresponding feature names.
 
     Raises
     ------
     ValueError
-        当后缀表达式中包含超出metadata范围的f_n时抛出。
+        When postfix expression contains f_n that exceeds metadata range.
     """
-    # 创建从f_n到特征名称的映射
+    # Create mapping from f_n to feature name
     f_to_feature = {}
     for idx, feature_name in enumerate(metadata.keys(), start=1):
         f_to_feature[f"f{idx}"] = feature_name
-    
+
     result = []
     for expr in expr_list:
-        # 将表达式按空格分割
+        # Split expression by space
         tokens = expr.split()
         translated_tokens = []
-        
+
         for token in tokens:
             if token.startswith("f") and token[1:].isdigit():
-                # 这是一个f_n格式的特征引用
+                # This is a f_n format feature reference
                 if token in f_to_feature:
                     translated_tokens.append(f_to_feature[token])
                 else:
                     raise ValueError(f"Feature reference '{token}' not found in metadata")
             else:
-                # 这是运算符或其他内容，保持不变
+                # This is an operator or other content, keep unchanged
                 translated_tokens.append(token)
-        
-        # 重新组合为表达式
+
+        # Reassemble into expression
         translated_expr = " ".join(translated_tokens)
         result.append(translated_expr)
-    
+
     return result
 
 
-## ========= 示例 =========
+## ========= Example =========
 # if __name__ == "__main__":
-#     # 示例metadata
+#     # Example metadata
 #     metadata = {"Airline":"Airline","Flight":"Flight","Time":"Time","Length":"Length"}
-    
-#     # 初始化特征映射
+#
+#     # Initialize feature mapping
 #     feature_map = init_feature_map(metadata)
-#     print("初始特征映射:", feature_map)
-    
-#     # 将metadata转换为后缀表达式列表
+#     print("Initial feature mapping:", feature_map)
+#
+#     # Convert metadata to postfix expression list
 #     expr_list = metadata_to_expr_list(metadata, feature_map)
-#     print("后缀表达式列表:", expr_list)
-    
-#     # 将后缀表达式翻译回特征名称
+#     print("Postfix expression list:", expr_list)
+#
+#     # Translate postfix expression back to feature names
 #     feature_names = expr_list_to_feature_names(expr_list, metadata)
-#     print("翻译回特征名称:", feature_names)
-    
-#     # 测试复杂表达式
+#     print("Translated to feature names:", feature_names)
+#
+#     # Test complex expressions
 #     complex_exprs = ["f1 f2 add", "f3 square", "f1 f2 multiply f3 divide"]
 #     translated_complex = expr_list_to_feature_names(complex_exprs, metadata)
-#     print("复杂表达式翻译:", translated_complex)
+#     print("Complex expression translation:", translated_complex)

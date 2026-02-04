@@ -13,101 +13,102 @@ logger = logging.getLogger(__name__)
 
 def reconstruct_string(results: List[Dict[str, Any]]) -> str:
     """
-    将提取的特征元素列表重新构建为多行字符串格式。
-    与 extract_feature_elements 函数功能相反。
-    
+    Reconstruct the extracted feature element list into a multi-line string format.
+    This is the inverse of the extract_feature_elements function.
+
     Args:
-        results: 由 extract_feature_elements 提取的元素列表
-        
+        results: Element list extracted by extract_feature_elements
+
     Returns:
-        str: 重构的多行字符串，每行格式为 <字段1><字段2>...<字段n>
+        str: Reconstructed multi-line string, each line formatted as <field1><field2>...<fieldn>
     """
     lines = []
-    
+
     for item in results:
-        # 构建字段列表，过滤掉 None 值
+        # Build field list, filtering out None values
         fields = [
             item['new_feature_name'],
             item['operator'],
             item['feature1']
         ]
-        
-        # 如果有 feature2 且不为 None，添加到字段列表
+
+        # If feature2 exists and is not None, add to field list
         if item['feature2'] is not None:
             fields.append(item['feature2'])
-        
-        # 添加 description
+
+        # Add description
         fields.append(item['description'])
-        
-        # 将每个字段用尖括号包围，并连接成一行
+
+        # Wrap each field in angle brackets and join into a line
         line = ''.join(f'<{field}>' for field in fields)
         lines.append(line)
-    
-    # 用换行符连接所有行
+
+    # Join all lines with newline
     return '|'.join(lines)
 
 def parse_rpn_expression(rpn_string: str) -> List[List[str]]:
     """
-    解析包含多个RPN表达式的字符串，返回多个RPN的token列表。
-    输入格式：[RPN1, RPN2, RPN3,...]，其中每个RPN内部用空格分隔，多个RPN用逗号分隔
-    
+    Parse a string containing multiple RPN expressions, return a list of token lists.
+    Input format: [RPN1, RPN2, RPN3,...], where each RPN is space-separated,
+    and multiple RPNs are comma-separated.
+
     Args:
-        rpn_string: RPN表达式字符串，例如 "[credit_amount duration divide, savings_status credit_amount divide, age credit_amount multiply]"
-    
+        rpn_string: RPN expression string, e.g. "[credit_amount duration divide, savings_status credit_amount divide, age credit_amount multiply]"
+
     Returns:
-        List[List[str]]: 解析后的多个RPN的token列表
+        List[List[str]]: Parsed list of token lists for multiple RPNs
     """
-    # 去除首尾和方括号
+    # Remove line breaks and brackets
     rpn_string = rpn_string.replace('\n', '')
     pattern = r'\{(.*)\}'
     rpn_string = re.findall(pattern, rpn_string)
 
-    # 去除所有的反斜杠\
+    # Remove all backslashes
     if rpn_string:
         rpn_string = [s.replace('\\', '') for s in rpn_string]
-    
-    # 按逗号分割多个RPN表达式
+
+    # Split multiple RPN expressions by comma
     rpn_expressions = [expr.strip() for expr in rpn_string[0].split(',') if expr.strip()]
-    
-    # 对每个RPN表达式按空格分割tokens
+
+    # Split each RPN expression into tokens by space
     all_tokens = []
     for expr in rpn_expressions:
         tokens = [token.strip() for token in expr.split() if token.strip()]
-        if tokens:  # 只添加非空的token列表
+        if tokens:  # Only add non-empty token lists
             all_tokens.append(tokens)
-    
+
     return all_tokens
 
 def rpn_to_operations(tokens: List[str], rpn_index: int = 1) -> List[Dict[str, Any]]:
     """
-    将单个逆波兰表达式token列表转换为特征工程操作列表。
-    支持复杂嵌套运算，例如：["f0", "f0", "f2", "divide", "multiply"]
-    
+    Convert a single reverse Polish notation token list to a feature engineering operation list.
+    Supports complex nested operations, e.g.: ["f0", "f0", "f2", "divide", "multiply"]
+
     Args:
-        tokens: 单个RPN表达式的token列表
-        rpn_index: RPN表达式的索引（用于生成特征名）
-    
+        tokens: Token list of a single RPN expression
+        rpn_index: Index of the RPN expression (used for generating feature names)
+
     Returns:
-        List[Dict[str, Any]]: 特征工程操作列表，格式与extract_feature_elements返回值相同
+        List[Dict[str, Any]]: Feature engineering operation list, same format as extract_feature_elements return value
     """
     operations = []
     feature_counter = 1
-    
-    # 支持的二元运算符集合
+
+    # Supported binary operator set
     binary_ops = {'plus', 'subtract', 'multiply', 'divide', 'mod', 'equal', 'greater', 'less', 'max', 'min',
                   'cross', 'concat', 'ratio', 'diff', 'bin', 'groupbythenmean', 'groupbythenmin',
                   'groupbythenmax', 'groupbythenmedian', 'groupbythenstd', 'groupbythenrank'}
-    
-    # 支持的一元运算符集合
+
+    # Supported unary operator set
     unary_ops = {'square', 'sqrt', 'cosine', 'sine', 'tangent', 'exp', 'cube', 'log', 'reciprocal',
                  'sigmoid', 'abs', 'negate', 'zscore', 'minmax', 'rank', 'one_hot', 'label_encode',
                  'extract_time', 'is_weekend', 'elapsed_time','rolling_mean', 'lag', 'cumsum','target_encoding'}
-    
+
     stack = []
-    
+
     for token in tokens:
         if token in binary_ops:
-            # 二元运算符
+            # Binary operator
             if len(stack) < 2:
                 raise ValueError(f"RPN {rpn_index}: Binary operator {token} requires at least 2 operands, but stack has {len(stack)}")
             
@@ -128,7 +129,7 @@ def rpn_to_operations(tokens: List[str], rpn_index: int = 1) -> List[Dict[str, A
             stack.append(new_feature_name)
             
         elif token in unary_ops:
-            # 一元运算符
+            # Unary operator
             if len(stack) < 1:
                 raise ValueError(f"RPN {rpn_index}: Unary operator {token} requires at least 1 operand, but stack has {len(stack)}")
             
@@ -147,55 +148,56 @@ def rpn_to_operations(tokens: List[str], rpn_index: int = 1) -> List[Dict[str, A
             stack.append(new_feature_name)
             
         else:
-            # 操作数（特征名）
+            # Operand (feature name)
             stack.append(token)
     
     return operations
 
 def RPN2exec(rpn_string: str, data_name: str, df: pd.DataFrame):
     """
-    执行多个逆波兰表达式，生成新特征。
-    输入格式：[RPN1, RPN2, RPN3,...]，其中每个RPN内部用空格分隔，多个RPN用逗号分隔
-    
+    Execute multiple reverse Polish notation expressions to generate new features.
+    Input format: [RPN1, RPN2, RPN3,...], where each RPN is space-separated,
+    and multiple RPNs are comma-separated.
+
     Args:
-        rpn_string: 多个RPN表达式字符串
-        data_name: 数据集名称
-        df: 输入DataFrame
-    
+        rpn_string: Multiple RPN expression string
+        data_name: Dataset name
+        df: Input DataFrame
+
     Returns:
-        tuple: (成功操作列表, 修改后的DataFrame)
+        tuple: (successful operations list, modified DataFrame)
     """
-    # 解析多个逆波兰表达式
+    # Parse multiple reverse Polish notation expressions
     tokens_list = parse_rpn_expression(rpn_string)
     print(f"Number of parsed RPN expressions: {len(tokens_list)}")
-    
+
     all_success_operations = []
     all_error_list = []
     all_intermediate_features = []
     all_final_features = []
     rpn_map = {}
-    
-    # 逐个处理每个RPN表达式
+
+    # Process each RPN expression one by one
     for rpn_index, tokens in enumerate(tokens_list, 1):
         print(f"RPN {rpn_index} tokens: {tokens}")
-        
-        # 建立映射
+
+        # Build mapping
         rpn_map[rpn_index] = '_'.join(tokens)
-        
+
         try:
-            # 转换为操作列表（单个RPN）
+            # Convert to operation list (single RPN)
             operations = rpn_to_operations(tokens, rpn_index)
             print(f"RPN {rpn_index} generated {len(operations)} operations")
-            
+
             success_operations = []
             error_list = []
             intermediate_features = []
-            rpn_failed = False  # 标记当前RPN是否失败
+            rpn_failed = False  # Flag if current RPN failed
 
-            # 执行当前RPN的操作
+            # Execute current RPN operations
             for i, operation in enumerate(operations):
                 if rpn_failed:
-                    # 如果之前的操作失败了，跳过后续操作
+                    # If previous operation failed, skip subsequent operations
                     break
 
                 try:
@@ -204,7 +206,7 @@ def RPN2exec(rpn_string: str, data_name: str, df: pd.DataFrame):
                     feature1 = operation.get("feature1")
                     feature2 = operation.get("feature2", None)
 
-                    # 检查依赖的特征是否存在
+                    # Check if dependent features exist
                     if feature1 not in df.columns:
                         raise KeyError(f"Dependent feature '{feature1}' does not exist")
                     if feature2 is not None and feature2 not in df.columns:
@@ -212,7 +214,7 @@ def RPN2exec(rpn_string: str, data_name: str, df: pd.DataFrame):
 
                     print(f"Executing operation {i+1}/{len(operations)}: {feature_name} = {feature1} {op} {feature2 or ''}")
 
-                    # 执行操作，使用apply_operation函数
+                    # Execute operation using apply_operation function
                     if feature2 is None:
                         df = apply_operation(df, feature_name, op, feature1)
                     else:
@@ -226,45 +228,45 @@ def RPN2exec(rpn_string: str, data_name: str, df: pd.DataFrame):
                     error_msg = f"Warning: RPN{rpn_index} feature '{feature_name}' processing failed, skipping remaining operations. Error: {e}"
                     print(error_msg)
                     error_list.append(error_msg)
-                    rpn_failed = True  # 标记失败，跳过后续操作
-            
-            # 记录当前RPN的成功操作和中间特征
+                    rpn_failed = True  # Mark failure, skip subsequent operations
+
+            # Record current RPN's successful operations and intermediate features
             all_success_operations.extend(success_operations)
             all_error_list.extend(error_list)
             all_intermediate_features.extend(intermediate_features)
-            
-            # 确定当前RPN的最终结果特征
+
+            # Determine current RPN's final result feature
             if success_operations:
                 final_feature = success_operations[-1]['new_feature_name']
                 all_final_features.append(final_feature)
-            
+
         except Exception as e:
             error_msg = f"Warning: RPN{rpn_index} processing failed, skipping entire RPN. Error: {e}"
             print(error_msg)
             all_error_list.append(error_msg)
-    
-    # 删除所有中间变量，只保留最终结果
+
+    # Delete all intermediate variables, keep only final results
     features_to_keep = set(all_final_features)
     features_to_drop = [f for f in all_intermediate_features if f not in features_to_keep]
-    
+
     if features_to_drop:
         print(f"Dropping intermediate features: {features_to_drop}")
         df = df.drop(columns=features_to_drop)
-    
+
     if all_error_list:
         logger.info("\n--- RPN Processing Error Summary ---")
         for err in all_error_list:
             logger.info(f"- {err}")
-    
+
     print(f"RPN processing complete, successfully generated {len(all_final_features)} final features")
 
-    # 使用映射rpn_map重命名保留的最终特征
+    # Use mapping rpn_map to rename retained final features
     for feature in all_final_features:
         rpn_index = int(feature.split('_')[1])
         new_name = rpn_map[rpn_index]
         df = df.rename(columns={feature: new_name})
         print(f"Renaming feature: {feature} -> {new_name}")
-    
+
     df = utils.drop_duplicate_columns(df)
 
     return all_success_operations, df
@@ -446,12 +448,12 @@ def extract_feature_elements(multiline_string: str) -> List[Dict[str, Any]]:
             'description': str
         }
 
-    额外功能：去掉每个字段首尾可能出现的任意数量连续反斜杠 \。
+    Additional functionality: Remove any number of leading/trailing backslashes from each field.
     """
     pattern = re.compile(r'<(.*?)>')
     results: List[Dict[str, Any]] = []
 
-    # 预编译去除首尾反斜杠的正则
+    # Pre-compile regex to strip leading/trailing backslashes
     strip_slashes = re.compile(r'^\\+|\\+$')
 
     for line in multiline_string.splitlines():
@@ -460,7 +462,7 @@ def extract_feature_elements(multiline_string: str) -> List[Dict[str, Any]]:
             continue
 
         tokens = pattern.findall(line)
-        # 去掉首尾任意数量的反斜杠
+        # Remove leading/trailing backslashes
         tokens = [strip_slashes.sub('', t) for t in tokens]
 
         if len(tokens) == 5:
@@ -487,7 +489,7 @@ def extract_feature_elements(multiline_string: str) -> List[Dict[str, Any]]:
 def NL2exec(text, data_name, df):
     results = extract_feature_elements(text)
     code_lines = []
-    success_operations = [] # 新增：存储成功操作的列表
+    success_operations = [] # Store list of successful operations
     error_list = []
 
     code_lines.append("def feature_generation(df):")
@@ -499,17 +501,17 @@ def NL2exec(text, data_name, df):
             feature1 = result.get("feature1")
             feature2 = result.get("feature2", None)
 
-            # 直接执行操作
+            # Execute operation directly
             if feature2 is None:
                 df = apply_operation(df, feature_name, operation, feature1)
                 code_line = f'    df = Postprocessor.apply_operation(df, "{feature_name}","{operation}", "{feature1}")'
             else:
                 df = apply_operation(df, feature_name, operation, feature1, feature2)
                 code_line = f'    df = Postprocessor.apply_operation(df, "{feature_name}","{operation}", "{feature1}", "{feature2}")'
-            
+
             code_lines.append(code_line)
-            success_operations.append(result) # 成功后，将整个 result 添加到成功列表中
-            
+            success_operations.append(result) # On success, add the entire result to success list
+
         except Exception as e:
             error_msg = f"Warning: Failed to process feature '{feature_name}'. Skipping. Error: {e}"
             print(error_msg)
@@ -530,7 +532,8 @@ def NL2exec(text, data_name, df):
 
 def exec_metadata(success_operations, data_name):
     """
-    函数2: 基于成功执行的操作，提取特征名和描述，并保存到JSON文件。
+    Function: Based on successfully executed operations, extract feature names and descriptions,
+    and save to JSON file.
     """
     results = []
 
@@ -545,7 +548,7 @@ def exec_metadata(success_operations, data_name):
             x = train_data[feature1]
             dummies = pd.get_dummies(x, prefix=x.name)
             feature_name_list = dummies.columns.tolist()
-            for feature_name_oh in feature_name_list: # 修复变量名冲突
+            for feature_name_oh in feature_name_list: # Fix variable name conflict
                 results.append((feature_name_oh, description))
         elif operator == "code":
             # Handle code operator: might have multiple columns or dropped columns
@@ -588,7 +591,7 @@ def exec_metadata(success_operations, data_name):
     
 #     results = extract_feature_elements(text)
     
-#     # 生成代码行
+#     # Generate code lines
 #     code_lines = []
 #     code_lines.append("def feature_generation(df):")
     
@@ -598,7 +601,7 @@ def exec_metadata(success_operations, data_name):
 #         feature1 = result["feature1"]
 #         feature2 = result["feature2"]
         
-#         # 根据操作类型和列数生成代码
+#         # Generate code based on operation type and column count
 #         if feature2 == None:
 #             code_line = f'    df = Postprocessor.apply_operation(df, "{feature_name}","{operation}", "{feature1}")'
 #         else:
@@ -608,9 +611,9 @@ def exec_metadata(success_operations, data_name):
     
 #     code_lines.append("    return df")
     
-#     # 组装最终代码
+#     # Assemble final code
 #     code = "\n".join(code_lines)
-#     # 保存到文件
+#     # Save to file
 #     with open(f'tmp/{data_name}/feature_generation.py', 'w') as f:
 #         f.write(code)
 
@@ -618,13 +621,13 @@ def exec_metadata(success_operations, data_name):
 
 def extract_metadata(text, data_name):
     """
-    函数2: 提取特征名和描述，并保存到JSON文件
-    返回格式: [(feature_name, description), ...]
+    Function: Extract feature names and descriptions, and save to JSON file.
+    Return format: [(feature_name, description), ...]
     """
     results = []
-    
+
     parse_results = extract_feature_elements(text)
-    
+
     for parse_result in parse_results:
         feature_name = parse_result["new_feature_name"]
         description = parse_result["description"]
@@ -639,30 +642,30 @@ def extract_metadata(text, data_name):
                 results.append((feature_name, description))
         else:
             results.append((feature_name, description))
-    
-    # 读取原始JSON文件
+
+    # Read original JSON file
     metadata_path = f'metadata/{data_name}.json'
     original_data = {}
-    
+
     try:
         with open(metadata_path, 'r', encoding='utf-8') as f:
             original_data = json.load(f)
     except (json.JSONDecodeError, FileNotFoundError):
         original_data = {}
-    
-    # 将结果转换为字典格式
+
+    # Convert results to dictionary format
     feature_dict = {feature: desc for feature, desc in results}
-    
-    # 合并原始数据和新数据
+
+    # Merge original data and new data
     merged_data = {**original_data, **feature_dict}
-    
-    # 保存到目标文件
+
+    # Save to destination file
     output_path = f'tmp/{data_name}/metadata.json'
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(merged_data, f, ensure_ascii=False, indent=2)
-    
+
     logger.info(f"Metadata saved to: {output_path}")
-    
+
     return results
 
 def apply_operation(data, feature_name, op, attr1, attr2=None, **kwargs):

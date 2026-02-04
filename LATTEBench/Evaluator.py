@@ -18,41 +18,41 @@ import numpy as np
 
 def safe_scale_large_values(train_data: pd.DataFrame, test_data: pd.DataFrame, threshold=1e30):
     """
-    检查 train_data/test_data 是否含有过大值（超过 threshold）或 inf，
-    将 inf 替换为 threshold，然后对该列同时在 train/test 中进行缩放。
-    
-    参数:
+    Check if train_data/test_data contains excessively large values (exceeding threshold) or inf,
+    replace inf with threshold, then scale the column in both train and test.
+
+    Args:
         train_data, test_data : pandas.DataFrame
-        threshold : float, 超过此绝对值的列将被缩放，inf 替换为此值
-    返回:
-        train_scaled, test_scaled : 处理后的 DataFrame
+        threshold : float, columns with absolute values exceeding this will be scaled, inf replaced with this value
+    Returns:
+        train_scaled, test_scaled : Processed DataFrames
     """
     train_scaled = train_data.copy()
     test_scaled = test_data.copy()
-    
-    # 替换 inf 为 threshold
+
+    # Replace inf with threshold
     train_scaled = train_scaled.replace([float('inf'), -float('inf')], threshold)
     test_scaled = test_scaled.replace([float('inf'), -float('inf')], threshold)
-    
-    # 检查每一列的绝对最大值
+
+    # Check maximum absolute value for each column
     max_abs = pd.concat([train_scaled.abs().max(), test_scaled.abs().max()], axis=1).max(axis=1)
 
-    # 找出超过阈值的列
+    # Find columns exceeding threshold
     bad_cols = max_abs[max_abs > threshold].index.tolist()
     if bad_cols:
-        print(f"⚠️ 检测到 {len(bad_cols)} 列值过大: {bad_cols}")
+        print(f"Warning: Detected {len(bad_cols)} column(s) with excessively large values: {bad_cols}")
 
         for col in bad_cols:
-            # 用列的绝对最大值进行缩放，保持 train/test 一致
+            # Scale using column's maximum absolute value, keeping train/test consistent
             max_val = max(train_scaled[col].abs().max(), test_scaled[col].abs().max())
             if max_val == 0:
                 continue
             scale_factor = max_val / threshold
             train_scaled[col] = train_scaled[col] / scale_factor
             test_scaled[col] = test_scaled[col] / scale_factor
-            print(f"✅ 已缩放列 '{col}'，缩放因子 = {scale_factor:.3e}")
+            print(f"Scaled column '{col}', scale factor = {scale_factor:.3e}")
     else:
-        print("✅ 未发现超大数值或 inf，无需缩放。")
+        print("No excessively large values or inf detected, no scaling needed.")
 
     return train_scaled, test_scaled
 
@@ -211,38 +211,38 @@ def train_and_evaluate_rf(train_data, test_data, target, task_type):
     y_train = train_data[target]
     X_test = test_data.drop(columns=[target])
     y_test = test_data[target]
-    
-    # 预处理
+
+    # Preprocessing
     for col in X_train.columns:
         if X_train[col].dtype == "object":
-            # 填充缺失值
+            # Fill missing values
             X_train[col] = X_train[col].fillna("missing")
             X_test[col] = X_test[col].fillna("missing")
-            # Label Encoding（训练和测试统一编码）
+            # Label Encoding (unified encoding for train and test)
             le = LabelEncoder()
             le.fit(pd.concat([X_train[col], X_test[col]], axis=0))
             X_train[col] = le.transform(X_train[col])
             X_test[col] = le.transform(X_test[col])
-        
+
         elif X_train[col].dtype == "category":
-            # 填充缺失值
+            # Fill missing values
             X_train[col] = X_train[col].cat.add_categories(["missing"]).fillna("missing")
             X_test[col] = X_test[col].cat.add_categories(["missing"]).fillna("missing")
-            # Label Encoding（训练和测试统一编码）
+            # Label Encoding (unified encoding for train and test)
             le = LabelEncoder()
             le.fit(pd.concat([X_train[col].astype(str), X_test[col].astype(str)], axis=0))
             X_train[col] = le.transform(X_train[col].astype(str))
             X_test[col] = le.transform(X_test[col].astype(str))
-        
+
         else:
-            # 数值列填充缺失值（用中位数更稳健）
+            # Fill missing values for numerical columns (median is more robust)
             median_val = X_train[col].median()
             X_train[col] = X_train[col].fillna(median_val)
             X_test[col] = X_test[col].fillna(median_val)
 
     X_train, X_test = safe_scale_large_values(X_train, X_test)
 
-    # 训练模型
+    # Train model
     if task_type ==1:
         model = RandomForestClassifier(random_state=42)
     elif task_type == 0:
@@ -250,11 +250,11 @@ def train_and_evaluate_rf(train_data, test_data, target, task_type):
     else:
         return None, None
     model.fit(X_train, y_train)
-    
-    # 预测
+
+    # Predict
     y_pred = model.predict(X_test)
-    
-    # 评估
+
+    # Evaluate
     if task_type ==1:
         metrics = {
             "score": accuracy_score(y_test, y_pred)
@@ -263,7 +263,7 @@ def train_and_evaluate_rf(train_data, test_data, target, task_type):
         metrics = {
             "score": 1-root_mean_squared_error(y_test, y_pred)
         }
-    
+
     return model, metrics['score']
 
 def train_and_evaluate_all(train_data, test_data, target):
@@ -283,38 +283,38 @@ def train_and_evaluate_all_rf(train_data, test_data, target, task_type):
     y_train = train_data[target]
     X_test = test_data.drop(columns=[target])
     y_test = test_data[target]
-    
-    # 预处理
+
+    # Preprocessing
     for col in X_train.columns:
         if X_train[col].dtype == "object":
-            # 填充缺失值
+            # Fill missing values
             X_train[col] = X_train[col].fillna("missing")
             X_test[col] = X_test[col].fillna("missing")
-            # Label Encoding（训练和测试统一编码）
+            # Label Encoding (unified encoding for train and test)
             le = LabelEncoder()
             le.fit(pd.concat([X_train[col], X_test[col]], axis=0))
             X_train[col] = le.transform(X_train[col])
             X_test[col] = le.transform(X_test[col])
-        
+
         elif X_train[col].dtype == "category":
-            # 填充缺失值
+            # Fill missing values
             X_train[col] = X_train[col].cat.add_categories(["missing"]).fillna("missing")
             X_test[col] = X_test[col].cat.add_categories(["missing"]).fillna("missing")
-            # Label Encoding（训练和测试统一编码）
+            # Label Encoding (unified encoding for train and test)
             le = LabelEncoder()
             le.fit(pd.concat([X_train[col].astype(str), X_test[col].astype(str)], axis=0))
             X_train[col] = le.transform(X_train[col].astype(str))
             X_test[col] = le.transform(X_test[col].astype(str))
-        
+
         else:
-            # 数值列填充缺失值（用中位数更稳健）
+            # Fill missing values for numerical columns (median is more robust)
             median_val = X_train[col].median()
             X_train[col] = X_train[col].fillna(median_val)
             X_test[col] = X_test[col].fillna(median_val)
 
     X_train, X_test = safe_scale_large_values(X_train, X_test)
 
-    # 训练模型
+    # Train model
     if task_type ==1:
         model = RandomForestClassifier(random_state=42)
     elif task_type == 0:
@@ -322,11 +322,11 @@ def train_and_evaluate_all_rf(train_data, test_data, target, task_type):
     else:
         return None, None
     model.fit(X_train, y_train)
-    
-    # 预测
+
+    # Predict
     y_pred = model.predict(X_test)
     if task_type ==1:
-    # 评估
+    # Evaluate
         accuracy = accuracy_score(y_test, y_pred)
         precision = precision_score(y_test, y_pred, average="weighted", zero_division=0)
         recall = recall_score(y_test, y_pred, average="weighted", zero_division=0)
@@ -336,7 +336,7 @@ def train_and_evaluate_all_rf(train_data, test_data, target, task_type):
         precision = 0
         recall = 0
         f1 = 0
-    
+
     return model, (accuracy,precision,recall,f1)
 
 def relative_absolute_error(y_test, y_predict):
